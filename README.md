@@ -12,14 +12,27 @@ npm install -S fetch-site
 ```js
 main({
   url: 'http://www.baidu.com',
+  // whether to save a screenshot
   shot: 'shot.png',
   dir: 'baidu.com',
-  includeRequest: true,
+  launchOption:{
+    headless: false
+  },
   openOption:{
     timeout: 100*1e3,
     waitUntil: 'networkidle0'
   },
-  onFinish: e=>console.log('ok')
+  // filter: return false will skip the resource
+  filter: response=>{
+    if(/his/.test(response.url)) return false
+  },
+  onBeforeOpen: async page=>{
+    page.setViewport({width: 1440, height: 1000})
+  },
+  onAfterOpen: async page=>{
+    await new Promise(r=>setTimeout(r, 5000))
+  },
+  onFinish: async page=>console.log('ok')
 })
 ```
 

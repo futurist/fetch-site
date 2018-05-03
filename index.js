@@ -11,13 +11,16 @@ async function main({
   dir,
   url,
   shot,
-  onFinish,
+  filter,
   indexFile,
+  launchOption,
   openOption,
-  includeRequest,
+  onBeforeOpen,
+  onAfterOpen,
+  onFinish,
 }={}) {
   if(!dir) throw 'dir cannot be empty'
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch(launchOption)
   const responseData = []
   await makeDir(dir)
   const page = await browser.newPage()
@@ -28,22 +31,22 @@ async function main({
       ok: response.ok(),
       headers: response.headers(),
     }
-    if(isBase64(data.url)) return
+    const request = response.request()
+    data.request = {
+      method: request.method(),
+      headers: request.headers(),
+      postData: request.postData(),
+      resourceType: request.resourceType(),
+    }
+    if(isBase64(data.url)
+      || filter && await filter(data, page)===false
+    ) return
     let body
     try{
       body = await response.buffer()
     }catch(e){
       // for 301/302 redirect, will throw no_body
       return
-    }
-    if(includeRequest){
-      const request = response.request()
-      data.request = {
-        method: request.method(),
-        headers: request.headers(),
-        postData: request.postData(),
-        resourceType: request.resourceType(),
-      }
     }
     const {pathname, protocol, host} = parseUrl(data.url)
     const filePath = ensureIndex(
@@ -58,13 +61,15 @@ async function main({
     await writeFile(filePath , body)
     responseData.push(data)
   })
+  onBeforeOpen && await onBeforeOpen(page)
   await page.goto(url, openOption)
-  await page.screenshot({
+  onAfterOpen && await onAfterOpen(page)
+  shot && await page.screenshot({
     path: path.join(dir, shot)
   })
   await browser.close()
   await writeFile(path.join(dir,'response.json'), JSON.stringify(responseData), 'utf8')
-  onFinish && onFinish()
+  onFinish && await onFinish(page)
 }
 
 process.on('unhandledRejection', console.log)
@@ -81,11 +86,22 @@ main({
   url: 'http://www.baidu.com',
   shot: 'shot.png',
   dir: 'baidu.com',
-  includeRequest: true,
+  launchOption:{
+    headless: false
+  },
   openOption:{
     timeout: 100*1e3,
     waitUntil: 'networkidle0'
   },
-  onFinish: e=>console.log('ok')
+  filter: response=>{
+    if(/his/.test(response.url)) return false
+  },
+  onBeforeOpen: async page=>{
+    page.setViewport({width: 1440, height: 1000})
+  },
+  onAfterOpen: async page=>{
+    await new Promise(r=>setTimeout(r, 5000))
+  },
+  onFinish: async page=>console.log('ok')
 })
 */

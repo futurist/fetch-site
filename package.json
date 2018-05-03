@@ -1,6 +1,6 @@
 {
   "name": "fetch-site",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "index.js",
   "repository": "https://github.com/futurist/fetch-site",
   "license": "MIT",
