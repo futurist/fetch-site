@@ -1,6 +1,6 @@
 {
   "name": "fetch-site",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "https://github.com/futurist/fetch-site",
   "license": "MIT",
@@ -8,5 +8,16 @@
     "is-base64": "^0.0.4",
     "make-dir": "^1.2.0",
     "puppeteer": "^1.3.0"
-  }
+  },
+  "engines": {
+    "node": ">= 8"
+  },
+  "description": "Fetch website with all the resources/responses/requests to local files, using puppeteer.",
+  "keywords": [
+    "puppeteer",
+    "crawl",
+    "spider",
+    "cache",
+    "fetch"
+  ]
 }

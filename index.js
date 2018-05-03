@@ -13,7 +13,7 @@ async function main({
   shot,
   onFinish,
   indexFile,
-  gotoOption,
+  openOption,
   includeRequest,
 }={}) {
   if(!dir) throw 'dir cannot be empty'
@@ -58,7 +58,7 @@ async function main({
     await writeFile(filePath , body)
     responseData.push(data)
   })
-  await page.goto(url, gotoOption)
+  await page.goto(url, openOption)
   await page.screenshot({
     path: path.join(dir, shot)
   })
@@ -80,9 +80,9 @@ module.exports = main
 main({
   url: 'http://www.baidu.com',
   shot: 'shot.png',
-  dir: 'baidu',
+  dir: 'baidu.com',
   includeRequest: true,
-  gotoOption:{
+  openOption:{
     timeout: 100*1e3,
     waitUntil: 'networkidle0'
   },
