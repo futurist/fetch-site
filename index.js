@@ -1,11 +1,11 @@
 const {parse:parseUrl} = require('url')
 const fs = require('fs')
-const path = require('path')
-const util = require('util')
+const {join:joinPath, dirname} = require('path')
+const {promisify} = require('util')
 const puppeteer = require('puppeteer')
 const makeDir = require('make-dir')
 const isBase64 = require('is-base64')
-const writeFile = util.promisify(fs.writeFile)
+const writeFile = promisify(fs.writeFile)
 
 async function main({
   dir,
@@ -25,20 +25,22 @@ async function main({
   await makeDir(dir)
   const page = await browser.newPage()
   page.on('response', async response => {
+    const request = response.request()
+    const url = response.url()
     const data = {
-      url: response.url(),
+      url,
+      file: '',  // optimize v8 hidden class
       status: response.status(),
       ok: response.ok(),
       headers: response.headers(),
+      request: {
+        method: request.method(),
+        headers: request.headers(),
+        postData: request.postData(),
+        resourceType: request.resourceType(),
+      }
     }
-    const request = response.request()
-    data.request = {
-      method: request.method(),
-      headers: request.headers(),
-      postData: request.postData(),
-      resourceType: request.resourceType(),
-    }
-    if(isBase64(data.url)
+    if(isBase64(url)
       || filter && await filter(data, page)===false
     ) return
     let body
@@ -48,27 +50,24 @@ async function main({
       // for 301/302 redirect, will throw no_body
       return
     }
-    const {pathname, protocol, host} = parseUrl(data.url)
-    const filePath = ensureIndex(
-      path.join(
-        dir,
-        encodeURIComponent(protocol + host),
-        pathname.split('/').map(encodeURIComponent).join('/')
-      ),
-      indexFile
-    )
-    await makeDir(path.dirname(filePath))
-    await writeFile(filePath , body)
+    const {pathname, protocol, host} = parseUrl(url)
+    const file = data.file = ensureIndex(joinPath(
+      encodeURIComponent(protocol + host),
+      pathname.split('/').map(encodeURIComponent).join('/')
+    ), indexFile)
+    const filePath = joinPath(dir, file)
     responseData.push(data)
+    await makeDir(dirname(filePath))
+    await writeFile(filePath , body)
   })
   onBeforeOpen && await onBeforeOpen(page)
   await page.goto(url, openOption)
   onAfterOpen && await onAfterOpen(page)
   shot && await page.screenshot({
-    path: path.join(dir, shot)
+    path: joinPath(dir, shot)
   })
   await browser.close()
-  await writeFile(path.join(dir,'response.json'), JSON.stringify(responseData), 'utf8')
+  await writeFile(joinPath(dir,'response.json'), JSON.stringify(responseData), 'utf8')
   onFinish && await onFinish(page)
 }
 
@@ -82,12 +81,13 @@ function ensureIndex(filePath, defaultName='index.html'){
 module.exports = main
 
 /* Usage:
+*/
 main({
   url: 'http://www.baidu.com',
   shot: 'shot.png',
   dir: 'baidu.com',
   launchOption:{
-    headless: false
+    // headless: false
   },
   openOption:{
     timeout: 100*1e3,
@@ -104,4 +104,3 @@ main({
   },
   onFinish: async page=>console.log('ok')
 })
-*/
