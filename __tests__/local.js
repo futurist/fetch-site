@@ -8,11 +8,11 @@ const sortOn = require('sort-on')
 const timeout = 30 * 1e3
 const fixtures = __dirname + '/fixtures'
 function folderIsDiff(a,b){
-  makeChangeForTest(a)
-  makeChangeForTest(b)
+  // makeChangeForTest(a)
+  // makeChangeForTest(b)
   return dirCompare.compare(a,b,{
     compareContent: true,
-    // excludeFilter: 'response.json'
+    excludeFilter: 'response.json' // TODO: check isEqual this json file
   }).then(result=>{
     for(let obj of result.diffSet){
       if(obj.state!='equal') return obj
