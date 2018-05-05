@@ -3,21 +3,34 @@ const {readFileSync, writeFileSync} = require('fs')
 const {promisify} = require('util')
 const dirCompare = require('dir-compare')
 const {exec} = require('child_process')
+const sortOn = require('sort-on')
 
 const timeout = 30 * 1e3
 const fixtures = __dirname + '/fixtures'
 function folderIsDiff(a,b){
+  makeChangeForTest(a)
+  makeChangeForTest(b)
   return dirCompare.compare(a,b,{
     compareContent: true,
-    excludeFilter: 'response.json'
+    // excludeFilter: 'response.json'
   }).then(result=>{
     for(let obj of result.diffSet){
       if(obj.state!='equal') return obj
     }
   })
 }
+function makeChangeForTest(folder){
+  const file = folder+'/response.json'
+  let newResponse = JSON.parse(readFileSync(file,'utf8'))
+  newResponse = sortOn(newResponse, ['file', 'headers.date'])
+  newResponse.map(v=>{
+    v.headers['date'] = null
+    v.headers['x-devtools-emulate-network-conditions-client-id'] = null
+    v.request.headers['x-devtools-emulate-network-conditions-client-id'] = null
+  })
+  writeFileSync(file, JSON.stringify(newResponse), 'utf8')
+}
 
-let testCount = 0
 beforeEach(done=>{
   const express = require('express')
   const app = express()
