@@ -19,7 +19,7 @@ async function main({
   onAfterOpen,
   onFinish,
 }={}) {
-  if(!dir) throw 'dir cannot be empty'
+  if(!dir||!url) throw 'dir and url cannot be empty'
   const browser = await puppeteer.launch(launchOption)
   const responseData = []
   await makeDir(dir)
@@ -80,27 +80,3 @@ function ensureIndex(filePath, defaultName='index.html'){
 
 module.exports = main
 
-/* Usage:
-*/
-main({
-  url: 'http://www.baidu.com',
-  shot: 'shot.png',
-  dir: 'baidu.com',
-  launchOption:{
-    // headless: false
-  },
-  openOption:{
-    timeout: 100*1e3,
-    waitUntil: 'networkidle0'
-  },
-  filter: response=>{
-    if(/his/.test(response.url)) return false
-  },
-  onBeforeOpen: async page=>{
-    page.setViewport({width: 1440, height: 1000})
-  },
-  onAfterOpen: async page=>{
-    await new Promise(r=>setTimeout(r, 5000))
-  },
-  onFinish: async page=>console.log('ok')
-})

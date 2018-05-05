@@ -1,9 +1,12 @@
 {
   "name": "fetch-site",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "index.js",
   "repository": "https://github.com/futurist/fetch-site",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "is-base64": "^0.0.4",
     "make-dir": "^1.2.0",
@@ -20,5 +23,10 @@
     "cache",
     "fetch",
     "website"
-  ]
+  ],
+  "devDependencies": {
+    "express": "^4.16.3",
+    "dir-compare": "^1.4.0",
+    "jest": "^22.4.3"
+  }
 }
