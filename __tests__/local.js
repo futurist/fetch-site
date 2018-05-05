@@ -82,6 +82,9 @@ describe('local site test', ()=>{
     await main({
       dir: this.folder,
       url: 'http://localhost:18181',
+      launchOption: {
+        args: ['--no-sandbox']
+      },
     })
 
     expect(
@@ -91,6 +94,9 @@ describe('local site test', ()=>{
     await main({
       dir: this.folder,
       url: 'http://localhost:18181',
+      launchOption: {
+        args: ['--no-sandbox']
+      },
       openOption: {
         waitUntil:'networkidle0'
       }
