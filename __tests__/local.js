@@ -7,6 +7,9 @@ const sortOn = require('sort-on')
 
 const timeout = 30 * 1e3
 const fixtures = __dirname + '/fixtures'
+const launchOption = {
+  args: ['--no-sandbox']
+}
 function folderIsDiff(a,b){
   // makeChangeForTest(a)
   // makeChangeForTest(b)
@@ -82,9 +85,7 @@ describe('local site test', ()=>{
     await main({
       dir: this.folder,
       url: 'http://localhost:18181',
-      launchOption: {
-        args: ['--no-sandbox']
-      },
+      launchOption,
     })
 
     expect(
@@ -94,9 +95,7 @@ describe('local site test', ()=>{
     await main({
       dir: this.folder,
       url: 'http://localhost:18181',
-      launchOption: {
-        args: ['--no-sandbox']
-      },
+      launchOption,
       openOption: {
         waitUntil:'networkidle0'
       }
