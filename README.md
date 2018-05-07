@@ -7,11 +7,26 @@ Fetch website with all the resources/responses/requests to local files, using [p
 
 ## Install
 
+**CLI**
+
 ```sh
-npm install -S fetch-site
+npm install -g fetch-site
+```
+
+**Module**
+```sh
+npm install --save fetch-site
 ```
 
 ## Usage
+
+**CLI**
+
+```sh
+fetch-site -u http://baidu.com -d baidu -o '{waitUntil:"networkidle0"}'
+```
+
+**Module**
 
 ```js
 main({
