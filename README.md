@@ -23,7 +23,24 @@ npm install --save fetch-site
 **CLI**
 
 ```sh
-fetch-site -u http://baidu.com -d baidu -o '{waitUntil:"networkidle0"}'
+$ fetch-site [options]
+
+Options
+--version, -v      Show version info
+--help, -h         Show help info
+--dir, -d          Dir to save result to
+--url, -u          Url to fetch
+--shot, -s         Filename to save a screenshot after page open
+--index-file       Default name of index file, like index.html
+--filter           Filter for response item, function as string
+--launch-option    Launch option passed into puppeteer, object as string
+--open-option, -o  Open option to passed into page, object as string
+--on-before-open   Before open page event, function as string
+--on-after-open    After open page event, function as string
+--on-finish        Finish fetch event, function as string
+
+Examples
+$ fetch-site -u http://baidu.com -d baidu -o '{waitUntil:"networkidle0"}'
 ```
 
 **Module**
