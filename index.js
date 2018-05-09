@@ -31,12 +31,13 @@ async function main({
 
   // launch puppeteer
   const browser = await puppeteer.launch(launchOption)
-  const responseData = []
   await makeDir(dir)
   const page = await browser.newPage()
+  page.fetchSite = {}
+  const responseData = page.fetchSite.responseData = []
 
   // response hook
-  page.on('response', async response => {
+  const responseHook = page.fetchSite.responseHook = async response => {
     const request = response.request()
     let url = response.url()
     const data = {
@@ -84,7 +85,8 @@ async function main({
     responseData.push(data)
     await makeDir(dirname(filePath))
     await writeFile(filePath, body, {encoding: toNodeEncoding(charset)})
-  })
+  }
+  page.on('response', responseHook)
 
   // goto url
   onBeforeOpen && await onBeforeOpen(page)
