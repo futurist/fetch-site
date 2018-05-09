@@ -14,12 +14,12 @@ Options
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
 --index-file        Default name of index file, like index.html
---filter            Filter for response item, function as string
+--on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
 --open-option, -o   Open option to passed into page, object as string
---on-before-open    Before open page event, function as string
---on-after-open     After open page event, function as string
---on-finish         Finish fetch event, function as string
+--on-before-open    Before open page event, function(page) as string
+--on-after-open     After open page event, function(page) as string
+--on-finish         Finish fetch event, function(page) as string
 
 Examples
 $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
@@ -51,7 +51,7 @@ if(!flags.dir){
   'onBeforeOpen',
   'onAfterOpen',
   'onFinish',
-  'filter'
+  'onResponse'
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
 
 main(flags).then(()=>{

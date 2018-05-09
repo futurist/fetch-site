@@ -14,7 +14,7 @@ test('should work without throw', async ()=>{
       timeout: 100*1e3,
       waitUntil: 'networkidle0'
     },
-    filter: response=>{
+    onResponse: response=>{
       if(/his/.test(response.url)) return false
     },
     onBeforeOpen: async page=>{

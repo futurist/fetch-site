@@ -12,8 +12,8 @@ const {assign} = Object
 async function main({
   dir,
   url,
-  shot='screenshot.png',
-  filter,
+  shot,
+  onResponse,
   indexFile,
   launchOption,
   openOption,
@@ -23,8 +23,10 @@ async function main({
 }={}) {
   // check options
   if(!dir||!url) throw 'dir and url cannot be empty'
-  // puppeteer cannot run inside Docker, since the sandbox
+  // 1. puppeteer cannot run inside Docker, since the sandbox
   // launchOption = assign({args: ['--no-sandbox']}, launchOption)
+  // 2. shot will add await so `load` event not accurate
+  // shot = shot || 'screenshot.png'
   openOption = assign({waitUntil: 'networkidle2'}, openOption)
 
   // launch puppeteer
@@ -36,14 +38,13 @@ async function main({
   // response hook
   page.on('response', async response => {
     const request = response.request()
-    const url = response.url()
-    const headers = response.headers()
+    let url = response.url()
     const data = {
       url,
       file: '',  // optimize v8 hidden class
       status: response.status(),
       ok: response.ok(),
-      headers,
+      headers: response.headers(),
       request: {
         method: request.method(),
         headers: request.headers(),
@@ -52,7 +53,7 @@ async function main({
       }
     }
     if(isBase64(url)
-      || filter && await filter(data, page)===false
+      || onResponse && await onResponse(data, page)===false
     ) return
     let body
     try{
@@ -61,7 +62,9 @@ async function main({
       // for 301/302 redirect, will throw no_body
       return
     }
-    const contentType = headers['content-type']||'text/plain'
+    // reset url from onResponse
+    url = data.url
+    const contentType = data.headers['content-type']
     const extension = mime.extension(contentType) // inferred from mime
     const charset = mime.charset(contentType)
     const {pathname, protocol, host} = new URL(url)

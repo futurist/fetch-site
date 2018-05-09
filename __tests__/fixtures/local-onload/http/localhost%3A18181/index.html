@@ -8,7 +8,16 @@
 </head>
 <body>
   <h1 id="h1">test for fetch-site</h1>
-  <iframe src="b.html" frameborder="0"></iframe>
+  <iframe src="b/" frameborder="0"></iframe>
   <script src="js/a.js?ver=1"></script>
+
+  <iframe id="blobtest"></iframe>
+  <script>
+  var blob=new Blob([`
+  <div>hello blob!</div>
+  `], {type: 'text/html'})
+  document.getElementById('blobtest').src = URL.createObjectURL(blob)
+  </script>
+
 </body>
 </html>

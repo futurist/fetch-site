@@ -9,8 +9,9 @@ function addCss (fileName) {
   head.appendChild(link)
 }
 
-addCss('css/a.css')
-
-document.getElementById('h1').style.background = 'url(images/中文.gif)'
+window.onload = e=> setTimeout(()=>{
+  addCss('css/a.css')
+  document.getElementById('h1').style.background = 'url(images/中文.gif)'
+}, 100)
 
 

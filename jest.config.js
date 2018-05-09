@@ -3,7 +3,13 @@ module.exports = {
   testPathIgnorePatterns: [
     'node_modules',
     'fixtures',
+    'coverage',
     'tmp',
-  ]
+  ],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'index.js',
+  ],
+  coverageDirectory: '__tests__/coverage',
 }
 

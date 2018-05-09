@@ -10,12 +10,14 @@ const fixtures = __dirname + '/fixtures'
 const launchOption = {
   args: ['--no-sandbox']
 }
-function folderIsDiff(a,b){
+function folderIsDiff(a,b, {noblob=true}={}){
   // makeChangeForTest(a)
   // makeChangeForTest(b)
+  let excludeFilter = 'response.json,screenshot.png'
+  if(noblob) excludeFilter+=',blob'
   return dirCompare.compare(a,b,{
     compareContent: true,
-    excludeFilter: 'response.json,screenshot.png'
+    excludeFilter
     // TODO: check isEqual these json/png files
     // CI will fail for screenshot.png since font-different, etc.
   }).then(result=>{
@@ -36,14 +38,20 @@ function makeChangeForTest(folder){
   writeFileSync(file, JSON.stringify(newResponse), 'utf8')
 }
 
-beforeEach(done=>{
+function setupServer(done){
   const express = require('express')
   const app = express()
   let count = 0
-  app.use(express.static(fixtures+'/www'))
+  app.get('/', (req,res)=>res.redirect('index.html'))
   app.get('/count', (req,res)=>res.end(++count+''))
-  this.server = app.listen(18181, done)
+  app.use(express.static(fixtures+'/www'))
+  return app.listen(18181, done)
+}
+// var fixtures=__dirname + '/fixtures'; setupServer()
+
+beforeEach(done=>{
   this.folder = fixtures+'/tmp/'+ +new Date
+  this.server = setupServer(done)
 })
 
 afterEach( done=>{
@@ -82,31 +90,64 @@ describe('local site test', ()=>{
   }, timeout)
 
 
-  test('should not throw', async ()=>{
-
-    await main({
-      dir: this.folder,
-      url: 'http://localhost:18181',
-      launchOption,
-    })
-
-    expect(
-      await folderIsDiff(this.folder, fixtures+'/local-onload')
-    ).toBeFalsy()
-
+  test('onload', async ()=>{
     await main({
       dir: this.folder,
       url: 'http://localhost:18181',
       launchOption,
       openOption: {
-        waitUntil:'networkidle0'
+        waitUntil:'load'
       }
     })
 
     expect(
-      await folderIsDiff(this.folder, fixtures+'/local-networkidle0')
+      await folderIsDiff(this.folder, fixtures+'/local-onload')
     ).toBeFalsy()
-
   }, timeout)
+
+  test('networkidle2', async ()=>{
+    await main({
+      dir: this.folder,
+      url: 'http://localhost:18181',
+      launchOption,
+      openOption: {
+        waitUntil:'networkidle2'
+      }
+    })
+
+    expect(
+      await folderIsDiff(this.folder, fixtures+'/local-networkidle2')
+    ).toBeFalsy()
+  }, timeout)
+
+  test('event hooks', async ()=>{
+    await main({
+      dir: this.folder,
+      url: 'http://localhost:18181',
+      launchOption,
+      shot: 'shot.png',
+      openOption: {
+        waitUntil:'networkidle2'
+      },
+      onResponse: res=>{
+        if(res.url.indexOf('dot')>-1) return false
+        if(/^blob/.test(res.url)){
+          res.url = 'blob:blob-url'
+        }
+      },
+      onBeforeOpen: async page=>{
+        page.setViewport({width: 1440, height: 1000})
+      },
+      onAfterOpen: async page=>{
+        await new Promise(r=>setTimeout(r, 100))
+      },
+      onFinish: async page=>expect(page).toBeTruthy()
+    })
+
+    expect(
+      await folderIsDiff(this.folder, fixtures+'/local-events', {noblob:false})
+    ).toBeFalsy()
+  }, timeout)
+
 })
 
