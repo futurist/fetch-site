@@ -1,6 +1,6 @@
 const {URL} = require('url')
 const fs = require('fs')
-const {join:joinPath, dirname} = require('path')
+const {join:joinPath, dirname} = require('path').posix
 const {promisify} = require('util')
 const puppeteer = require('puppeteer')
 const makeDir = require('make-dir')
@@ -63,7 +63,10 @@ async function main({
       return
     }
     // reset url from onResponse
-    url = data.url
+    if(url!==data.url) {
+      data.reqUrl = url
+      url = data.url
+    }
     const contentType = data.headers['content-type']
     const extension = mime.extension(contentType) // inferred from mime
     const charset = mime.charset(contentType)
