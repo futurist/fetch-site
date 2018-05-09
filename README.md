@@ -20,7 +20,7 @@ npm install --save fetch-site
 
 ## Usage
 
-**CLI**
+**CLI Usage**
 
 ```sh
 $ fetch-site url [options]
@@ -28,7 +28,7 @@ $ fetch-site url [options]
 Options
 --version, -v       Show version info
 --help, -h          Show help info
---dir, -d           Dir to save result to
+--dir, -d           Dir to save result to (use url.hostname by default)
 --shot, -s          Filename to save a screenshot after page open
 --index-file        Default name of index file, like index.html
 --filter            Filter for response item, function as string
@@ -42,13 +42,14 @@ Examples
 $ fetch-site http://baidu.com -o '{waitUntil:"networkidle0"}'
 ```
 
-**Module**
+**Module Usage**
 
 ```js
-main({
+const fetchSite = require('fetch-site')
+fetchSite({
   url: 'http://www.baidu.com',
   // whether to save a screenshot
-  shot: 'shot.png',
+  shot: 'shot.png',  // default is 'screenshot.png'
   dir: 'baidu.com',
   launchOption:{
     headless: false
