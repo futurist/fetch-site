@@ -8,7 +8,7 @@ const sortOn = require('sort-on')
 const timeout = 30 * 1e3
 const fixtures = __dirname + '/fixtures'
 const launchOption = {
-  args: ['--no-sandbox']
+  args: ['--no-sandbox'],
 }
 function folderIsDiff(a,b, {noblob=true}={}){
   // makeChangeForTest(a)
@@ -40,8 +40,10 @@ function makeChangeForTest(folder){
 
 function setupServer(done){
   const express = require('express')
+  const throttle = require('express-throttle-bandwidth')
   const app = express()
   let count = 0
+  app.use(throttle(90e3)) // ~10kb/s
   app.get('/', (req,res)=>res.redirect('index.html'))
   app.get('/count', (req,res)=>res.end(++count+''))
   app.use(express.static(fixtures+'/www'))
