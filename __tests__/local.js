@@ -15,7 +15,9 @@ function folderIsDiff(a,b){
   // makeChangeForTest(b)
   return dirCompare.compare(a,b,{
     compareContent: true,
-    excludeFilter: 'response.json' // TODO: check isEqual this json file
+    excludeFilter: 'response.json,screenshot.png'
+    // TODO: check isEqual these json/png files
+    // CI will fail for screenshot.png since font-different, etc.
   }).then(result=>{
     for(let obj of result.diffSet){
       if(obj.state!='equal') return obj
