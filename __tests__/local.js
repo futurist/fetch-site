@@ -13,7 +13,7 @@ const launchOption = {
 function folderIsDiff(a,b, {noblob=true}={}){
   // makeChangeForTest(a)
   // makeChangeForTest(b)
-  let excludeFilter = 'response.json,screenshot.png'
+  let excludeFilter = 'response.json,shot.png'
   if(noblob) excludeFilter+=',blob'
   return dirCompare.compare(a,b,{
     compareContent: true,
@@ -98,7 +98,7 @@ describe('local site test', ()=>{
       url: 'http://localhost:18181',
       launchOption,
       openOption: {
-        waitUntil:'load'
+        waitUntil:'domcontentloaded'
       }
     })
 
