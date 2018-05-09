@@ -68,13 +68,15 @@ async function main({
     const extension = mime.extension(contentType) // inferred from mime
     const charset = mime.charset(contentType)
     const {pathname, protocol, host} = new URL(url)
-    const file = data.file = ensureIndex(joinPath(
+    const pathArr = [
       protocol.replace(':',''),
       encodeURIComponent(host),
+    ].concat(
       /^blob/.test(protocol)  // url as a whole
         ? encodeURIComponent(pathname)
-        : pathname.split('/').map(encodeURIComponent).join('/')
-    ), indexFile)
+        : ensureIndex(pathname, indexFile).split('/').map(encodeURIComponent)
+    )
+    const file = data.file = joinPath(...pathArr)
     const filePath = joinPath(dir, file)
     responseData.push(data)
     await makeDir(dirname(filePath))
