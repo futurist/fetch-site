@@ -1,12 +1,13 @@
 const {URL} = require('url')
 const fs = require('fs')
-const {join:joinPath, dirname} = require('path').posix
+const {join:joinPath, dirname, extname} = require('path').posix
 const {promisify} = require('util')
 const puppeteer = require('puppeteer')
 const makeDir = require('make-dir')
 const isBase64 = require('is-base64')
 const mime = require('mime-types')
 
+const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const renameFile = promisify(fs.rename)
 const {assign} = Object
@@ -88,19 +89,30 @@ async function main({
     responseData.push(data)
 
     // write to file
-    const filePath = joinPath(dir, file)
-    await ensureFolder(filePath)
-    const writeOption = {encoding: toNodeEncoding(charset)}
-    try{
-      await writeFile(filePath, body, writeOption)
-    }catch(e){
-      // write to folder as file
-      // throw errno:-21 EISDIR
-      const {code, path} = e
-      if(code==='EISDIR'){
-        await writeFile(joinPath(filePath, indexFile), body, writeOption)
-      }
+    const writeOption = {
+      encoding: toNodeEncoding(charset)
     }
+    let filePath = joinPath(dir, file)
+    await ensureFolder(filePath)
+    try{
+      let stat = fs.lstatSync(filePath)
+      if (stat.isDirectory()) {
+        filePath = joinPath(filePath, indexFile)
+      }
+      stat = fs.lstatSync(filePath)
+      if(stat.isFile()) {
+        if(body.equals(await readFile(filePath))){
+          // it's same file, do nothing
+          return
+        }
+        const suffix = '.'+(+new Date).toString(36)
+        filePath += suffix
+        data.file += suffix
+      }
+    }catch(e){
+      // ENOENT -2 (not exists) is OK
+    }
+    await writeFile(filePath, body, writeOption)
   }
   page.on('response', responseHook)
 
@@ -125,17 +137,18 @@ async function ensureFolder(filePath, indexFile) {
     await makeDir(dirname(filePath))
   } catch(e){
     let {code, path} = e
-    console.log(e)
+    if(!path) return
     // e.g. exist file: xx/abc
     // folder to create: xx/abc/x/y
     // will throw errno:-20
-    if(code==='ENOTDIR'){
+    if(code==='ENOTDIR') {
       await ensureFolder(path, indexFile)
     }
     // folder to create: xx/abc/x
     // will throw errno:-17
-    if(code==='EEXIST'){
-      const tempPath = path + Math.random()
+    if(code==='EEXIST') {
+      const tempPath = path +
+        Math.random().toString(36).slice(1)
       await renameFile(path, tempPath)
       await makeDir(path)
       await renameFile(tempPath, joinPath(path, indexFile))
