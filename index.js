@@ -6,7 +6,9 @@ const puppeteer = require('puppeteer')
 const makeDir = require('make-dir')
 const isBase64 = require('is-base64')
 const mime = require('mime-types')
+
 const writeFile = promisify(fs.writeFile)
+const renameFile = promisify(fs.rename)
 const {assign} = Object
 
 async function main({
@@ -14,7 +16,7 @@ async function main({
   url,
   shot,
   onResponse,
-  indexFile,
+  indexFile = 'index.html',
   launchOption,
   openOption,
   onBeforeOpen,
@@ -80,11 +82,25 @@ async function main({
         ? encodeURIComponent(pathname)
         : ensureIndex(pathname, indexFile).split('/').map(encodeURIComponent)
     )
+
+    // push data
     const file = data.file = joinPath(...pathArr)
-    const filePath = joinPath(dir, file)
     responseData.push(data)
-    await makeDir(dirname(filePath))
-    await writeFile(filePath, body, {encoding: toNodeEncoding(charset)})
+
+    // write to file
+    const filePath = joinPath(dir, file)
+    await ensureFolder(filePath)
+    const writeOption = {encoding: toNodeEncoding(charset)}
+    try{
+      await writeFile(filePath, body, writeOption)
+    }catch(e){
+      // write to folder as file
+      // throw errno:-21 EISDIR
+      const {code, path} = e
+      if(code==='EISDIR'){
+        await writeFile(joinPath(filePath, indexFile), body, writeOption)
+      }
+    }
   }
   page.on('response', responseHook)
 
@@ -104,8 +120,32 @@ async function main({
 
 process.on('unhandledRejection', console.log)
 
-function ensureIndex(filePath, defaultName='index.html'){
-  if(filePath.endsWith('/')) filePath += defaultName
+async function ensureFolder(filePath, indexFile) {
+  try{
+    await makeDir(dirname(filePath))
+  } catch(e){
+    let {code, path} = e
+    console.log(e)
+    // e.g. exist file: xx/abc
+    // folder to create: xx/abc/x/y
+    // will throw errno:-20
+    if(code==='ENOTDIR'){
+      await ensureFolder(path, indexFile)
+    }
+    // folder to create: xx/abc/x
+    // will throw errno:-17
+    if(code==='EEXIST'){
+      const tempPath = path + Math.random()
+      await renameFile(path, tempPath)
+      await makeDir(path)
+      await renameFile(tempPath, joinPath(path, indexFile))
+    }
+    await ensureFolder(filePath, indexFile)
+  }
+}
+
+function ensureIndex(filePath, indexFile){
+  if(filePath.endsWith('/')) filePath += indexFile
   return filePath
 }
 
