@@ -64,7 +64,7 @@ async function main({
       headers: response.headers(),
       request
     }
-    if(isBase64(url)
+    if((/^data:/i.test(url))
       || onResponse && await onResponse(data, page)===false
     ) return
     let body
@@ -89,8 +89,8 @@ async function main({
       hostDir(host),
     ].concat(
       /^blob/.test(protocol)  // url as a whole
-        ? encodeURIComponent(pathname)
-        : ensureIndex(pathname, indexFile).split('/').map(encodeURIComponent)
+        ? safePath(pathname)
+        : ensureIndex(pathname, indexFile).split('/').map(safePath)
     )
 
     // push data
@@ -174,6 +174,11 @@ async function ensureFolder(filePath, indexFile) {
 
 function hostDir(host, replacement = '_') {
   return host.replace(':', replacement)
+}
+
+// prevent multiple escape % as %25
+function safePath (url) {
+  return encodeURIComponent(url).replace(/%25/g, '%')
 }
 
 function ensureHTTP(url){
