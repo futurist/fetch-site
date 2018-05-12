@@ -16,6 +16,7 @@ async function main({
   dir,
   url,
   shot,
+  waitFor,
   onResponse,
   indexFile = 'index.html',
   launchOption,
@@ -128,6 +129,7 @@ async function main({
   onBeforeOpen && await onBeforeOpen(page)
   await page.goto(url, openOption)
   onAfterOpen && await onAfterOpen(page)
+  waitFor != null && await page.waitFor(waitFor)
   shot && await page.screenshot({
     path: joinPath(dir, shot)
   })

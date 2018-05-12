@@ -13,6 +13,7 @@ Options
 --help, -h          Show help info
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
+--wait-for, -w      Wait for milliseconds/selector/function
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
@@ -29,6 +30,7 @@ $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
     version: {alias: 'v'},
     dir: {alias: 'd'},
     shot: {alias: 's'},
+    'wait-for': {alias: 'w'},
     'open-option': {alias: 'o'},
     'launch-option': {alias: 'l'},
   }

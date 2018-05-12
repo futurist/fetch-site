@@ -30,6 +30,7 @@ Options
 --help, -h          Show help info
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
+--wait-for, -w      Wait for milliseconds/selector/function
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
