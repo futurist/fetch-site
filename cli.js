@@ -38,6 +38,7 @@ const {flags, input} = cli
 const [url] = input||[]
 
 if(!url) cli.showHelp()
+else flags.url = url
 
 ;[
   'launchOption',
@@ -48,7 +49,7 @@ if(!url) cli.showHelp()
   'onResponse'
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
 
-(async ()=>{
+;(async ()=>{
   const {dir, url, data} = await main(flags)
   console.log(`\nSuccess: site ${url} saved into ${dir}`)
 })()
