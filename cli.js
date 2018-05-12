@@ -37,13 +37,7 @@ $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
 const {flags, input} = cli
 const [url] = input||[]
 
-if(!url) {
-  cli.showHelp()
-}
-flags.url = ensureHTTP(url)
-if(!flags.dir){
-  flags.dir = new URL(flags.url).host.replace(':', '_')
-}
+if(!url) cli.showHelp()
 
 ;[
   'launchOption',
@@ -54,13 +48,8 @@ if(!flags.dir){
   'onResponse'
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
 
-main(flags).then(()=>{
-  console.log(`\nSuccess: site ${flags.url} saved into ${flags.dir}`)
-})
+(async ()=>{
+  const {dir, url, data} = await main(flags)
+  console.log(`\nSuccess: site ${url} saved into ${dir}`)
+})()
 
-
-function ensureHTTP(url){
-  return !/^https?:\/\//i.test(url)
-    ? 'http://'+url
-    : url
-}

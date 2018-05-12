@@ -5,6 +5,7 @@ const dirCompare = require('dir-compare')
 const {exec} = require('child_process')
 const sortOn = require('sort-on')
 
+const run = promisify(exec)
 const timeout = 30 * 1e3
 const fixtures = __dirname + '/fixtures'
 const launchOption = {
@@ -81,13 +82,11 @@ describe('local site test', ()=>{
       expect(e).toBeTruthy()
     }
 
-    try{
-      await main({
-        url: 'http://localhost:18181',
-      })
-    }catch(e){
-      expect(e).toBeTruthy()
-    }
+    await main({
+      url: 'http://localhost:18181',
+    })
+    await run(`rm -rf localhost_18181`)
+    expect(1).toBeTruthy()
 
   }, timeout)
 
@@ -95,7 +94,7 @@ describe('local site test', ()=>{
   test('onload', async ()=>{
     await main({
       dir: this.folder,
-      url: 'http://localhost:18181',
+      url: 'localhost:18181',
       launchOption,
       openOption: {
         waitUntil:'domcontentloaded'
@@ -110,7 +109,7 @@ describe('local site test', ()=>{
   test('networkidle2', async ()=>{
     await main({
       dir: this.folder,
-      url: 'http://localhost:18181',
+      url: 'localhost:18181',
       launchOption,
       openOption: {
         waitUntil:'networkidle2'
@@ -125,7 +124,7 @@ describe('local site test', ()=>{
   test('event hooks', async ()=>{
     await main({
       dir: this.folder,
-      url: 'http://localhost:18181',
+      url: 'localhost:18181',
       launchOption,
       shot: 'shot.png',
       openOption: {

@@ -25,12 +25,16 @@ async function main({
   onFinish,
 }={}) {
   // check options
-  if(!dir||!url) throw 'dir and url cannot be empty'
+  if(!url) throw 'url cannot be empty'
   // 1. puppeteer cannot run inside Docker, since the sandbox
   // launchOption = assign({args: ['--no-sandbox']}, launchOption)
   // 2. shot will add await so `load` event not accurate
   // shot = shot || 'screenshot.png'
   openOption = assign({waitUntil: 'networkidle2'}, openOption)
+  url = ensureHTTP(url)
+  if(!dir){
+    dir = hostDir(new URL(url).host)
+  }
 
   // launch puppeteer
   const browser = await puppeteer.launch(launchOption)
@@ -41,20 +45,23 @@ async function main({
 
   // response hook
   const responseHook = page.fetchSite.responseHook = async response => {
-    const request = response.request()
+    const req = response.request()
     let url = response.url()
+    const request = {
+      method: req.method(),
+      headers: req.headers(),
+      postData: req.postData(),
+      resourceType: req.resourceType(),
+    }
+    // const reqUrl = req.url()
+    // if(reqUrl != url) request.url = reqUrl
     const data = {
       url,
       file: '',  // optimize v8 hidden class
       status: response.status(),
       ok: response.ok(),
       headers: response.headers(),
-      request: {
-        method: request.method(),
-        headers: request.headers(),
-        postData: request.postData(),
-        resourceType: request.resourceType(),
-      }
+      request
     }
     if(isBase64(url)
       || onResponse && await onResponse(data, page)===false
@@ -68,7 +75,7 @@ async function main({
     }
     // reset url from onResponse
     if(url!==data.url) {
-      data.reqUrl = url
+      data.realUrl = url
       url = data.url
     }
     const contentType = data.headers['content-type']
@@ -76,8 +83,8 @@ async function main({
     const charset = mime.charset(contentType)
     const {pathname, protocol, host} = new URL(url)
     const pathArr = [
-      protocol.replace(':',''),
-      encodeURIComponent(host),
+      hostDir(protocol, ''),
+      hostDir(host),
     ].concat(
       /^blob/.test(protocol)  // url as a whole
         ? encodeURIComponent(pathname)
@@ -128,6 +135,11 @@ async function main({
   await browser.close()
   await writeFile(joinPath(dir,'response.json'), JSON.stringify(responseData), 'utf8')
   onFinish && await onFinish(page)
+  return {
+    dir,
+    url,
+    data: responseData
+  }
 }
 
 process.on('unhandledRejection', console.log)
@@ -155,6 +167,16 @@ async function ensureFolder(filePath, indexFile) {
     }
     await ensureFolder(filePath, indexFile)
   }
+}
+
+function hostDir(host, replacement = '_') {
+  return host.replace(':', replacement)
+}
+
+function ensureHTTP(url){
+  return !/^https?:\/\//i.test(url)
+    ? 'http://'+url
+    : '' + url
 }
 
 function ensureIndex(filePath, indexFile){
