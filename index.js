@@ -71,6 +71,7 @@ async function main({
       body = await response.buffer()
     }catch(e){
       // for 301/302 redirect, will throw no_body
+      responseData.push(data)
       return
     }
     // reset url from onResponse
