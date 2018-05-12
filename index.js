@@ -53,6 +53,7 @@ async function main({
       headers: req.headers(),
       postData: req.postData(),
       resourceType: req.resourceType(),
+      // redirects: req.redirectChain().map(v=>v.url())
     }
     // const reqUrl = req.url()
     // if(reqUrl != url) request.url = reqUrl
