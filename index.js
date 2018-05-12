@@ -101,7 +101,7 @@ async function main({
       encoding: toNodeEncoding(charset)
     }
     let filePath = joinPath(dir, file)
-    await ensureFolder(filePath)
+    await ensureFolder(filePath, indexFile)
     try{
       let stat = fs.lstatSync(filePath)
       if (stat.isDirectory()) {
