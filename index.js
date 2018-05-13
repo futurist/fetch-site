@@ -4,7 +4,6 @@ const {join:joinPath, dirname, extname} = require('path').posix
 const {promisify} = require('util')
 const puppeteer = require('puppeteer')
 const makeDir = require('make-dir')
-const isBase64 = require('is-base64')
 const mime = require('mime-types')
 
 const readFile = promisify(fs.readFile)

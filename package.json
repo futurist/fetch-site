@@ -1,6 +1,6 @@
 {
   "name": "fetch-site",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "main": "index.js",
   "repository": "https://github.com/futurist/fetch-site",
   "license": "MIT",
@@ -10,7 +10,6 @@
   "bin": "cli.js",
   "dependencies": {
     "eval-expression": "^1.0.0",
-    "is-base64": "^0.0.4",
     "make-dir": "^1.2.0",
     "meow": "^5.0.0",
     "mime-types": "^2.1.18",
