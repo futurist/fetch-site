@@ -99,6 +99,9 @@ describe('local site test', ()=>{
       launchOption,
       openOption: {
         waitUntil:'domcontentloaded'
+      },
+      onFinish: page=>{
+        page.removeListener('response', page.fetchSite.responseHook)
       }
     })
 
