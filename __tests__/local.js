@@ -84,6 +84,7 @@ describe('local site test', ()=>{
 
     await main({
       url: 'http://localhost:18181',
+      launchOption
     })
     await run(`rm -rf localhost_18181`)
     expect(1).toBeTruthy()
