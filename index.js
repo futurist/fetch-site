@@ -130,9 +130,16 @@ async function main({
   await page.goto(url, openOption)
   onAfterOpen && await onAfterOpen(page)
   waitFor != null && await page.waitFor(waitFor)
-  shot && await page.screenshot({
-    path: joinPath(dir, shot)
-  })
+  if(shot){
+    if(shot===true) shot = 'screenshot.png'
+    const opt = typeof shot==='object'
+    ? shot
+    : {
+      path: joinPath(dir, shot),
+      fullPage: true
+    }
+    await page.screenshot(opt)
+  }
 
   // finish work
   await browser.close()
