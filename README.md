@@ -26,11 +26,12 @@ npm install --save fetch-site
 $ fetch-site url [options]
 
 Options
---version, -v       Show version info
---help, -h          Show help info
+--version           Show version info
+--help              Show help info
+--no-headless, -h   Set {headless: false} for 'launch-option'
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
---wait-for, -w      Wait for milliseconds/selector/function
+--wait-for, -w      Wait for milliseconds/selector/function/closed(true)
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
@@ -40,8 +41,10 @@ Options
 --on-finish         Finish fetch event, function(page) as string
 
 Examples
-$ fetch-site http://baidu.com -o '{waitUntil:"networkidle0"}'
+$ fetch-site http://baidu.com -h -w -o '{waitUntil:"networkidle0"}'
 ```
+
+Above example will open the url with `{headless:false}`, wait until `networkidle0`, and wait for page close to exit.
 
 **Module Usage**
 
