@@ -9,11 +9,12 @@ Usage
 $ ${pkg.name} url [options]
 
 Options
---version, -v       Show version info
---help, -h          Show help info
+--version           Show version info
+--help              Show help info
+--no-headless, -h   Set {headless: false} for 'launch-option'
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
---wait-for, -w      Wait for milliseconds/selector/function
+--wait-for, -w      Wait for milliseconds/selector/function/closed(true)
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
@@ -26,11 +27,10 @@ Examples
 $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
 `, {
   flags:{
-    help: {alias: 'h'},
-    version: {alias: 'v'},
     dir: {alias: 'd'},
     shot: {alias: 's'},
     'wait-for': {alias: 'w'},
+    'no-headless': {alias: 'h'},
     'open-option': {alias: 'o'},
     'launch-option': {alias: 'l'},
   }
@@ -51,6 +51,10 @@ else flags.url = url
   'onResponse',
   'waitFor'
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
+
+flags.launchOption = Object.assign({
+  headless: !flags.noHeadless
+}, flags.launchOption)
 
 ;(async ()=>{
   const {dir, url, data} = await main(flags)
