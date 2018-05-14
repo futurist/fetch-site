@@ -48,7 +48,8 @@ else flags.url = url
   'onBeforeOpen',
   'onAfterOpen',
   'onFinish',
-  'onResponse'
+  'onResponse',
+  'waitFor'
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
 
 ;(async ()=>{

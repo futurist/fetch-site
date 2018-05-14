@@ -125,11 +125,27 @@ async function main({
   }
   page.on('response', responseHook)
 
+  const closed = new Promise(res=>{
+    page.on('close', res)
+    page.on('error', res)
+  })
+
   // goto url
   onBeforeOpen && await onBeforeOpen(page)
   await page.goto(url, openOption)
-  onAfterOpen && await onAfterOpen(page)
-  waitFor != null && await page.waitFor(waitFor)
+
+  // wait finish
+  const pending = []
+  onAfterOpen && pending.push(onAfterOpen(page))
+  if(waitFor){
+    pending.push(waitFor===true ? closed : page.waitFor(waitFor))
+  }
+  await Promise.race([
+    Promise.all(pending),
+    closed
+  ])
+
+  // screen shot
   if(shot){
     if(shot===true) shot = 'screenshot.png'
     const opt = typeof shot==='object'
@@ -138,13 +154,17 @@ async function main({
       path: joinPath(dir, shot),
       fullPage: true
     }
-    await page.screenshot(opt)
+    try{
+      // ensure page not closed
+      await page.screenshot(opt)
+    }catch(e){}
   }
 
   // finish work
   await browser.close()
   await writeFile(joinPath(dir,'response.json'), JSON.stringify(responseData), 'utf8')
   onFinish && await onFinish(page)
+
   return {
     dir,
     url,
@@ -206,4 +226,3 @@ function toNodeEncoding(enc){
 }
 
 module.exports = main
-
