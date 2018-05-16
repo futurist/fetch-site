@@ -28,7 +28,7 @@ $ fetch-site url [options]
 Options
 --version           Show version info
 --help              Show help info
---no-headless, -h   Set {headless: false} for 'launch-option'
+--no-headless, -h   Set {headless: false} for launch-option
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
 --wait-for, -w      Wait for milliseconds/selector/function/closed(true)
