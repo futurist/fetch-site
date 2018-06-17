@@ -14,6 +14,10 @@ Options
 --no-headless, -h   Set {headless: false} for 'launch-option'
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
+--user-agent, -u    Set userAgent
+--viewport, -v      Set viewport
+--timeout, -t       Set maximum navigation time in milliseconds
+--cookies, -c       Set cookies
 --wait-for, -w      Wait for milliseconds/selector/function/closed(true)
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
@@ -30,6 +34,10 @@ $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
     dir: {alias: 'd'},
     shot: {alias: 's'},
     'wait-for': {alias: 'w'},
+    'user-agent': {alias: 'u'},
+    'viewport': {alias: 'v'},
+    'timeout': {alias: 't'},
+    'cookies': {alias: 'c'},
     'no-headless': {alias: 'h'},
     'open-option': {alias: 'o'},
     'launch-option': {alias: 'l'},
@@ -49,7 +57,9 @@ else flags.url = url
   'onAfterOpen',
   'onFinish',
   'onResponse',
-  'waitFor'
+  'waitFor',
+  'cookies',
+  'viewport',
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
 
 flags.launchOption = Object.assign({

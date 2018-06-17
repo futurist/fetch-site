@@ -15,10 +15,14 @@ async function main({
   dir,
   url,
   shot,
+  userAgent,
+  viewport,
+  timeout,
+  cookies,
+  launchOption,
   waitFor,
   onResponse,
   indexFile = 'index.html',
-  launchOption,
   openOption,
   onBeforeOpen,
   onAfterOpen,
@@ -131,6 +135,10 @@ async function main({
   })
 
   // goto url
+  if(userAgent) page.setUserAgent(userAgent)
+  if(viewport) page.setViewport(viewport)
+  if(timeout) page.setDefaultNavigationTimeout(timeout)
+  if(cookies) page.setCookie(...cookies)
   onBeforeOpen && await onBeforeOpen(page)
   await page.goto(url, openOption)
 
