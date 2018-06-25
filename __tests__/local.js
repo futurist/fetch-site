@@ -29,8 +29,25 @@ function folderIsDiff(a,b, {noblob=true}={}){
 }
 
 function responseIsSame(responseFilePath) {
-  const res = require(responseFilePath)
-  res.forEach(v=>{delete v.headers['last-modified']; delete v.headers.date})
+  const unstableResHeaders = [
+    'etag',
+    'date',
+    'last-modified',
+    'connection',
+    'keep-alive'
+  ]
+  const unstableReqHeaders = [
+    'x-devtools-emulate-network-conditions-client-id',
+    'user-agent'
+  ]
+  let res = require(responseFilePath)
+    .sort((a,b)=>a.file > b.file)
+    .filter(v=> /^http/i.test(v.url))
+
+  res.forEach(v=> {
+    unstableResHeaders.forEach(x=>delete v.headers[x])
+    unstableReqHeaders.forEach(x=>v.request && delete v.request.headers[x])
+  })
   expect(res).toMatchSnapshot()
 }
 
@@ -47,15 +64,28 @@ function makeChangeForTest(folder){
 }
 
 function setupServer(done){
+  const toxy = require('toxy')
+  const poisons = toxy.poisons
+  const rules = toxy.rules
   const express = require('express')
-  const throttle = require('express-throttle-bandwidth')
   const app = express()
   let count = 0
-  app.use(throttle(90e3)) // ~10kb/s
   app.get('/', (req,res)=>res.redirect('index.html'))
   app.get('/count', (req,res)=>res.end(++count+''))
   app.use(express.static(fixtures+'/www'))
-  return app.listen(18181, done)
+  const local = app.listen(18181, done)
+  
+  /** Simulate bandwidth */
+  var proxy = toxy()
+  // proxy
+  // .all('/*')
+  // .forward('http://localhost:18080')
+  // .outgoingPoison(poisons.bandwidth({ bps: 10 }))
+  // proxy.listen(18181)
+
+  return {
+    proxy, local
+  }
 }
 // var fixtures=__dirname + '/fixtures'; setupServer()
 
@@ -66,7 +96,10 @@ beforeEach(done=>{
 
 afterEach( done=>{
   const {server, folder} = this
-  server && server.close()
+  if(server){
+    server.proxy.close()
+    server.local.close()
+  }
   // exec(`rm -rf ${folder}`, done)
   done()
 })
@@ -106,8 +139,23 @@ describe('local site test', ()=>{
       openOption: {
         waitUntil:'domcontentloaded'
       },
-      onFinish: page=>{
-        page.removeListener('response', page.fetchSite.responseHook)
+      // this not worked with localhost??
+      // onAfterOpen: page=> page.removeListener('response', page.fetchSite.responseHook)
+
+      onBeforeOpen: async page=>{
+        await page.exposeFunction('loaded', function(){
+          console.log('loaded')
+          page.removeListener('response', page.fetchSite.responseHook)
+        })
+        await page.evaluateOnNewDocument(function(){
+          // console.log(location.href)
+          // this event will emit 4 times:
+          // /index.html, about:blank, [domloaded], /b/, blob:
+          if(location.href.indexOf('/index.html')<0) return
+          document.addEventListener('DOMContentLoaded', e=>{
+            window.loaded()
+          })
+        })
       }
     })
 
@@ -115,7 +163,7 @@ describe('local site test', ()=>{
       await folderIsDiff(this.folder, fixtures+'/local-onload')
     ).toBeFalsy()
 
-    responseIsSame(fixtures+'/local-onload/response.json')
+    responseIsSame(this.folder+'/response.json')
 
   }, timeout)
 
