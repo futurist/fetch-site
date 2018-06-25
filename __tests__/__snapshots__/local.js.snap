@@ -1,0 +1,540 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`local site test event hooks 1`] = `
+Array [
+  Object {
+    "file": "",
+    "headers": Object {
+      "content-length": "64",
+      "content-type": "text/html; charset=utf-8",
+      "keep-alive": "timeout=38",
+      "location": "index.html",
+      "vary": "Accept",
+      "x-powered-by": "Express",
+    },
+    "ok": false,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "6F7259628D3B51C9FFC5305A48E0F2A4",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 302,
+    "url": "http://localhost:18181/",
+  },
+  Object {
+    "file": "http/localhost_18181/index.html",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "579",
+      "content-type": "text/html; charset=UTF-8",
+      "etag": "W/\\"243-16343930e48\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "6F7259628D3B51C9FFC5305A48E0F2A4",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/index.html",
+  },
+  Object {
+    "file": "http/localhost_18181/js/a.js",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "349",
+      "content-type": "application/javascript; charset=UTF-8",
+      "etag": "W/\\"15d-16343f27fe0\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "script",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/js/a.js?ver=1",
+  },
+  Object {
+    "file": "http/localhost_18181/b/index.html",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "4299",
+      "content-type": "text/html; charset=UTF-8",
+      "etag": "W/\\"10cb-163444e5f68\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "6F7259628D3B51C9FFC5305A48E0F2A4",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/b/",
+  },
+  Object {
+    "file": "blob/blob-url",
+    "headers": Object {
+      "content-length": "28",
+      "content-type": "text/html",
+    },
+    "ok": true,
+    "realUrl": "blob:http://localhost:18181/00b6a7c0-2c92-4304-8065-8be8451039ee",
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "x-devtools-emulate-network-conditions-client-id": "6F7259628D3B51C9FFC5305A48E0F2A4",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "blob:blob-url",
+  },
+  Object {
+    "file": "http/localhost_18181/css/b.css",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "78",
+      "content-type": "text/css; charset=UTF-8",
+      "etag": "W/\\"4e-1632e55ccc8\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/b/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "stylesheet",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/css/b.css",
+  },
+  Object {
+    "file": "http/localhost_18181/css/a.css",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "132",
+      "content-type": "text/css; charset=UTF-8",
+      "etag": "W/\\"84-16343a5cb28\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "stylesheet",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/css/a.css",
+  },
+  Object {
+    "file": "http/localhost_18181/images/%25E4%25B8%25AD%25E6%2596%2587.gif",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "2870",
+      "content-type": "image/gif",
+      "etag": "W/\\"b36-1632e96dd08\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "image",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/images/%E4%B8%AD%E6%96%87.gif",
+  },
+]
+`;
+
+exports[`local site test networkidle2 1`] = `
+Array [
+  Object {
+    "file": "",
+    "headers": Object {
+      "content-length": "64",
+      "content-type": "text/html; charset=utf-8",
+      "keep-alive": "timeout=38",
+      "location": "index.html",
+      "vary": "Accept",
+      "x-powered-by": "Express",
+    },
+    "ok": false,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "A7BFDD167F467B70671B1C665B5C98E1",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 302,
+    "url": "http://localhost:18181/",
+  },
+  Object {
+    "file": "http/localhost_18181/index.html",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "579",
+      "content-type": "text/html; charset=UTF-8",
+      "etag": "W/\\"243-16343930e48\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "A7BFDD167F467B70671B1C665B5C98E1",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/index.html",
+  },
+  Object {
+    "file": "http/localhost_18181/js/a.js",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "349",
+      "content-type": "application/javascript; charset=UTF-8",
+      "etag": "W/\\"15d-16343f27fe0\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "script",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/js/a.js?ver=1",
+  },
+  Object {
+    "file": "http/localhost_18181/b/index.html",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "4299",
+      "content-type": "text/html; charset=UTF-8",
+      "etag": "W/\\"10cb-163444e5f68\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "A7BFDD167F467B70671B1C665B5C98E1",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/b/",
+  },
+  Object {
+    "file": "blob/http%3A%2F%2Flocalhost%3A18181%2Fa58509fc-6d35-4c69-83b8-55c74531c9da",
+    "headers": Object {
+      "content-length": "28",
+      "content-type": "text/html",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "x-devtools-emulate-network-conditions-client-id": "A7BFDD167F467B70671B1C665B5C98E1",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "blob:http://localhost:18181/a58509fc-6d35-4c69-83b8-55c74531c9da",
+  },
+  Object {
+    "file": "http/localhost_18181/css/b.css",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "78",
+      "content-type": "text/css; charset=UTF-8",
+      "etag": "W/\\"4e-1632e55ccc8\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/b/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "stylesheet",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/css/b.css",
+  },
+  Object {
+    "file": "http/localhost_18181/images/dotbg118.gif",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "2870",
+      "content-type": "image/gif",
+      "etag": "W/\\"b36-1632e4dcde8\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/css/b.css",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "image",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/images/dotbg118.gif",
+  },
+  Object {
+    "file": "http/localhost_18181/css/a.css",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "132",
+      "content-type": "text/css; charset=UTF-8",
+      "etag": "W/\\"84-16343a5cb28\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "stylesheet",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/css/a.css",
+  },
+  Object {
+    "file": "http/localhost_18181/images/%25E4%25B8%25AD%25E6%2596%2587.gif",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "2870",
+      "content-type": "image/gif",
+      "etag": "W/\\"b36-1632e96dd08\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "image",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/images/%E4%B8%AD%E6%96%87.gif",
+  },
+]
+`;
+
+exports[`local site test onload 1`] = `
+Array [
+  Object {
+    "file": "",
+    "headers": Object {
+      "content-length": "64",
+      "content-type": "text/html; charset=utf-8",
+      "keep-alive": "timeout=38",
+      "location": "index.html",
+      "vary": "Accept",
+      "x-powered-by": "Express",
+    },
+    "ok": false,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "6CFEE7C71F8E76ECDCC35AC79414E00E",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 302,
+    "url": "http://localhost:18181/",
+  },
+  Object {
+    "file": "http/localhost_18181/index.html",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "579",
+      "content-type": "text/html; charset=UTF-8",
+      "etag": "W/\\"243-16343930e48\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "6CFEE7C71F8E76ECDCC35AC79414E00E",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/index.html",
+  },
+  Object {
+    "file": "http/localhost_18181/js/a.js",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "349",
+      "content-type": "application/javascript; charset=UTF-8",
+      "etag": "W/\\"15d-16343f27fe0\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "script",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/js/a.js?ver=1",
+  },
+  Object {
+    "file": "http/localhost_18181/b/index.html",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "4299",
+      "content-type": "text/html; charset=UTF-8",
+      "etag": "W/\\"10cb-163444e5f68\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/index.html",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+        "x-devtools-emulate-network-conditions-client-id": "6CFEE7C71F8E76ECDCC35AC79414E00E",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/b/",
+  },
+  Object {
+    "file": "",
+    "headers": Object {
+      "content-length": "28",
+      "content-type": "text/html",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "upgrade-insecure-requests": "1",
+        "x-devtools-emulate-network-conditions-client-id": "6CFEE7C71F8E76ECDCC35AC79414E00E",
+      },
+      "method": "GET",
+      "resourceType": "document",
+    },
+    "status": 200,
+    "url": "blob:http://localhost:18181/5a664ad1-74dd-44bf-9ed9-eb0a0f68e3c4",
+  },
+  Object {
+    "file": "",
+    "headers": Object {
+      "accept-ranges": "bytes",
+      "cache-control": "public, max-age=0",
+      "content-length": "78",
+      "content-type": "text/css; charset=UTF-8",
+      "etag": "W/\\"4e-1632e55ccc8\\"",
+      "keep-alive": "timeout=38",
+      "x-powered-by": "Express",
+    },
+    "ok": true,
+    "request": Object {
+      "headers": Object {
+        "referer": "http://localhost:18181/b/",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/68.0.3419.0 Safari/537.36",
+      },
+      "method": "GET",
+      "resourceType": "stylesheet",
+    },
+    "status": 200,
+    "url": "http://localhost:18181/css/b.css",
+  },
+]
+`;

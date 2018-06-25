@@ -27,6 +27,13 @@ function folderIsDiff(a,b, {noblob=true}={}){
     }
   })
 }
+
+function responseIsSame(responseFilePath) {
+  const res = require(responseFilePath)
+  res.forEach(v=>{delete v.headers['last-modified']; delete v.headers.date})
+  expect(res).toMatchSnapshot()
+}
+
 function makeChangeForTest(folder){
   const file = folder+'/response.json'
   let newResponse = JSON.parse(readFileSync(file,'utf8'))
@@ -88,7 +95,6 @@ describe('local site test', ()=>{
     })
     await run(`rm -rf localhost_18181`)
     expect(1).toBeTruthy()
-
   }, timeout)
 
 
@@ -108,6 +114,9 @@ describe('local site test', ()=>{
     expect(
       await folderIsDiff(this.folder, fixtures+'/local-onload')
     ).toBeFalsy()
+
+    responseIsSame(fixtures+'/local-onload/response.json')
+
   }, timeout)
 
   test('networkidle2', async ()=>{
@@ -123,6 +132,9 @@ describe('local site test', ()=>{
     expect(
       await folderIsDiff(this.folder, fixtures+'/local-networkidle2')
     ).toBeFalsy()
+
+    responseIsSame(fixtures+'/local-networkidle2/response.json')
+
   }, timeout)
 
   test('event hooks', async ()=>{
@@ -152,6 +164,9 @@ describe('local site test', ()=>{
     expect(
       await folderIsDiff(this.folder, fixtures+'/local-events', {noblob:false})
     ).toBeFalsy()
+
+    responseIsSame(fixtures+'/local-events/response.json')
+
   }, timeout)
 
 })
