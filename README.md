@@ -28,9 +28,13 @@ $ fetch-site url [options]
 Options
 --version           Show version info
 --help              Show help info
---no-headless, -h   Set {headless: false} for launch-option
+--no-headless, -h   Set {headless: false} for 'launch-option'
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
+--user-agent, -u    Set userAgent
+--viewport, -v      Set viewport
+--timeout, -t       Set maximum navigation time in milliseconds
+--cookies, -c       Set cookies
 --wait-for, -w      Wait for milliseconds/selector/function/closed(true)
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
@@ -41,10 +45,10 @@ Options
 --on-finish         Finish fetch event, function(page) as string
 
 Examples
-$ fetch-site http://baidu.com -h -w -o '{waitUntil:"networkidle0"}'
+$ fetch-site http://baidu.com -h -w -o '{waitUntil:"networkidle0"}' -u 'My-UA-String' -t 0
 ```
 
-Above example will open the url with `{headless:false}`, wait until `networkidle0`, and wait for page close to exit.
+Above example will open the url with `{headless:false}`, wait until `networkidle0`, and wait for page close to exit, using UAString `"My-UA-String"`.
 
 **Module Usage**
 
