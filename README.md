@@ -31,8 +31,8 @@ Options
 --no-headless, -h   Set {headless: false} for 'launch-option'
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
---user-agent, -u    Set userAgent
---viewport, -v      Set viewport
+--user-agent, -u    Set userAgent, string
+--viewport, -v      Set viewport, e.g. `'{width:1024, height: 768}'`
 --timeout, -t       Set maximum navigation time in milliseconds
 --cookies, -c       Set cookies
 --wait-for, -w      Wait for milliseconds/selector/function/closed(true)
