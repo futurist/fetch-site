@@ -11,14 +11,14 @@ $ ${pkg.name} url [options]
 Options
 --version           Show version info
 --help              Show help info
---no-headless, -h   Set {headless: false} for 'launch-option'
+--no-headless, -h   Set {headless: false} for 'launch-option', default true
 --dir, -d           Dir to save result to
 --shot, -s          Filename to save a screenshot after page open
 --user-agent, -u    Set userAgent, string
 --viewport, -v      Set viewport, , e.g. '{width:1024, height: 768}'
 --timeout, -t       Set maximum navigation time in milliseconds
 --cookies, -c       Set cookies
---wait-for, -w      Wait for milliseconds/selector/function/closed(true)
+--wait-for, -w      Wait for milliseconds/selector/function/closed, default true
 --index-file        Default name of index file, like index.html
 --on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
@@ -33,12 +33,12 @@ $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
   flags:{
     dir: {alias: 'd'},
     shot: {alias: 's'},
-    'wait-for': {alias: 'w'},
+    'wait-for': {alias: 'w', default: true},
     'user-agent': {alias: 'u'},
     'viewport': {alias: 'v'},
-    'timeout': {alias: 't'},
+    'timeout': {alias: 't', default: 0},
     'cookies': {alias: 'c'},
-    'no-headless': {alias: 'h'},
+    'no-headless': {type: 'boolean', alias: 'h', default: true},
     'open-option': {alias: 'o'},
     'launch-option': {alias: 'l'},
   }
@@ -59,11 +59,11 @@ else flags.url = url
   'onResponse',
   'waitFor',
   'cookies',
-  'viewport',
 ].forEach(v=>flags[v] = evalExpression(flags[v]))
 
 flags.launchOption = Object.assign({
-  headless: !flags.noHeadless
+	headless: !flags.noHeadless,
+	defaultViewport: null
 }, flags.launchOption)
 
 ;(async ()=>{
