@@ -1,3 +1,10 @@
+<a name="1.7.4"></a>
+## [1.7.4](https://github.com/futurist/fetch-site/compare/1.7.3...1.7.4) (2019-8-3 23:44:41)
+
+- revert cli timeout=0  [c5f3fa6](https://github.com/futurist/fetch-site/commit/c5f3fa6)
+- fix: timeout=0 not set bug  [8226752](https://github.com/futurist/fetch-site/commit/8226752)
+
+
 <a name="1.7.3"></a>
 ## [1.7.3](https://github.com/futurist/fetch-site/compare/1.7.2...1.7.3) (2019-8-3 23:35:12)
 
