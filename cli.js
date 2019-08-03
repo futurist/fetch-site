@@ -36,7 +36,7 @@ $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
     'wait-for': {alias: 'w', default: true},
     'user-agent': {alias: 'u'},
     'viewport': {alias: 'v'},
-    'timeout': {alias: 't', default: 0},
+    'timeout': {alias: 't'},
     'cookies': {alias: 'c'},
     'no-headless': {type: 'boolean', alias: 'h', default: true},
     'open-option': {alias: 'o'},
