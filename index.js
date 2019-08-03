@@ -137,7 +137,7 @@ async function main({
   // goto url
   if(userAgent) page.setUserAgent(userAgent)
   if(viewport) page.setViewport(viewport)
-  if(timeout) page.setDefaultNavigationTimeout(timeout)
+  if(timeout != null) page.setDefaultNavigationTimeout(timeout)
   if(cookies) page.setCookie(...cookies)
   onBeforeOpen && await onBeforeOpen(page)
   await page.goto(url, openOption)
