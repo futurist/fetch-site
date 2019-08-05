@@ -1,3 +1,9 @@
+<a name="1.7.5"></a>
+## [1.7.5](https://github.com/futurist/fetch-site/compare/1.7.4...1.7.5) (2019-8-5 23:41:30)
+
+- add auto default useragent  [c07da82](https://github.com/futurist/fetch-site/commit/c07da82)
+
+
 <a name="1.7.4"></a>
 ## [1.7.4](https://github.com/futurist/fetch-site/compare/1.7.3...1.7.4) (2019-8-3 23:44:41)
 
