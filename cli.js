@@ -4,6 +4,8 @@ const {URL} = require('url')
 const evalExpression = require('eval-expression')
 const main = require('./')
 const pkg = require('./package.json')
+const {getUA} = require('./ua')
+
 const cli = require('meow')(`
 Usage
 $ ${pkg.name} url [options]
@@ -49,6 +51,9 @@ const [url] = input||[]
 
 if(!url) cli.showHelp()
 else flags.url = url
+
+const ua = getUA(flags.u)
+flags.userAgent = ua ? ua.useragent : flags.u
 
 ;[
   'launchOption',
