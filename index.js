@@ -61,7 +61,6 @@ async function main({
     try{
       body = await getBuffer()
     }catch(e){
-			console.log('body:', e.message)
       // for 301/302 redirect, will throw no_body
       responseData.push(data)
       return
@@ -73,8 +72,15 @@ async function main({
     }
     const contentType = data.headers['content-type']
     const extension = mime.extension(contentType) // inferred from mime
-    const charset = mime.charset(contentType)
-    const {pathname, protocol, host} = new URL(url)
+		const charset = mime.charset(contentType)
+		let urlObj = {}
+		try{
+			urlObj = new URL(url)
+		} catch(e){
+			// TypeError [ERR_INVALID_URL]: Invalid URL: ":"
+			return
+		}
+    const {pathname, protocol, host} = urlObj
     const pathArr = [
       hostDir(protocol, ''),
       hostDir(host),
