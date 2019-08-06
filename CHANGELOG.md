@@ -1,3 +1,10 @@
+<a name="1.7.6"></a>
+## [1.7.6](https://github.com/futurist/fetch-site/compare/1.7.5...1.7.6) (2019-8-6 17:13:32)
+
+- refactor: capture new page  [e28e8bb](https://github.com/futurist/fetch-site/commit/e28e8bb)
+- add revisionHash for conflicts when ENOTDIR  [d5bfebd](https://github.com/futurist/fetch-site/commit/d5bfebd)
+
+
 <a name="1.7.5"></a>
 ## [1.7.5](https://github.com/futurist/fetch-site/compare/1.7.4...1.7.5) (2019-8-5 23:41:30)
 
