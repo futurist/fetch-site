@@ -1,3 +1,9 @@
+<a name="1.7.7"></a>
+## [1.7.7](https://github.com/futurist/fetch-site/compare/1.7.6...1.7.7) (2019-8-6 17:35:20)
+
+- fix: invalid url throw  [076daf8](https://github.com/futurist/fetch-site/commit/076daf8)
+
+
 <a name="1.7.6"></a>
 ## [1.7.6](https://github.com/futurist/fetch-site/compare/1.7.5...1.7.6) (2019-8-6 17:13:32)
 
