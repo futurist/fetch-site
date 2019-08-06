@@ -5,6 +5,7 @@ const {promisify} = require('util')
 const puppeteer = require('puppeteer')
 const makeDir = require('make-dir')
 const mime = require('mime-types')
+const revisionHash = require('rev-hash');
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -124,8 +125,20 @@ async function main({
       }
     }catch(e){
       // ENOENT -2 (not exists) is OK
-    }
-    await writeFile(filePath, body, writeOption)
+		}
+		try {
+			await writeFile(filePath, body, writeOption)
+		} catch(e) {
+			/**
+			 * Error: ENOTDIR: not a directory
+			 * errno: -20, code: 'ENOTDIR', syscall: 'open',
+			 */
+			const name = revisionHash(body)
+			const file = data.file = joinPath('conflicts', name)
+			filePath = joinPath(dir, file)
+			await ensureFolder(filePath, indexFile)
+			await writeFile(filePath, body, writeOption)
+		}
   }
   page.on('response', responseHook)
 

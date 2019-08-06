@@ -7,13 +7,17 @@
   "scripts": {
     "test": "jest"
   },
-  "bin": "cli.js",
+  "bin": {
+    "fs": "cli.js",
+    "fetch-site": "cli.js"
+  },
   "dependencies": {
     "eval-expression": "^1.0.0",
     "make-dir": "^3.0.0",
     "meow": "^5.0.0",
     "mime-types": "^2.1.24",
     "puppeteer": "^1.19.0",
+    "rev-hash": "^3.0.0",
     "windows-release": "^3.2.0"
   },
   "engines": {
