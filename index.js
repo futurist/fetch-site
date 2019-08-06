@@ -41,41 +41,27 @@ async function main({
     dir = hostDir(new URL(url).host)
   }
 
-  // launch puppeteer
+	// launch puppeteer
+	launchOption = assign({
+		handleSIGINT: false
+	}, launchOption)
   const browser = await puppeteer.launch(launchOption)
   await makeDir(dir)
   const page = await browser.newPage()
-  page.fetchSite = {}
-  const responseData = page.fetchSite.responseData = []
+  const responseData = []
 
-  // response hook
-  const responseHook = page.fetchSite.responseHook = async response => {
-    const req = response.request()
-    let url = response.url()
-    const request = {
-      method: req.method(),
-      headers: req.headers(),
-      postData: req.postData(),
-      resourceType: req.resourceType(),
-      // redirects: req.redirectChain().map(v=>v.url())
-    }
-    // const reqUrl = req.url()
-    // if(reqUrl != url) request.url = reqUrl
-    const data = {
-      url,
-      file: '',  // optimize v8 hidden class
-      status: response.status(),
-      ok: response.ok(),
-      headers: response.headers(),
-      request
-    }
+	const writeData = async ({page, url, data, getBuffer})=>{
     if((/^data:/i.test(url))
       || onResponse && await onResponse(data, page)===false
-    ) return
+		) return
+
+		// if(!page.isRoot) console.log(url)
+
     let body
     try{
-      body = await response.buffer()
+      body = await getBuffer()
     }catch(e){
+			console.log('body:', e.message)
       // for 301/302 redirect, will throw no_body
       responseData.push(data)
       return
@@ -139,13 +125,110 @@ async function main({
 			await ensureFolder(filePath, indexFile)
 			await writeFile(filePath, body, writeOption)
 		}
-  }
-  page.on('response', responseHook)
-
-  const closed = new Promise(res=>{
+	}
+  // response hook
+  const responseHook = page => async response => {
+    const req = response.request()
+		let url = response.url()
+    const request = {
+      method: req.method(),
+      headers: req.headers(),
+      postData: req.postData(),
+      resourceType: req.resourceType(),
+      // redirects: req.redirectChain().map(v=>v.url())
+    }
+    // const reqUrl = req.url()
+    // if(reqUrl != url) request.url = reqUrl
+    const data = {
+      url,
+      file: '',  // optimize v8 hidden class
+      status: response.status(),
+      ok: response.ok(),
+      headers: response.headers(),
+      request
+		}
+		await writeData({
+			page,
+			data,
+			url,
+			getBuffer: ()=>{
+				return response.buffer()
+			}
+		})
+	}
+	const whenClose = page => new Promise(res=>{
     page.on('close', res)
     page.on('error', res)
-  })
+	})
+	const hookPage = page =>{
+		page.fetchSite = {}
+		const res = responseHook(page)
+		page.on('response', res)
+		whenClose(page).then(()=>{
+			page.off('response', res)
+		})
+	}
+	hookPage(page)
+	page.isRoot = true
+
+	browser.on('targetcreated', async target => {
+		if (target.type() === 'page') {
+      if (/^https?:\/\//i.test(target.url())) {
+				console.log('new tab created:', target.url())
+				let page
+        try {
+          page = await target.page()
+					hookPage(page)
+					page.setCacheEnabled(false)
+					// 'response' only applied to resource
+					const isLoaded = await page.evaluate(()=>{
+						return document.readyState != 'loading'
+					})
+					const run = async()=>{
+						const url = page.url()
+						const request = {
+							method: 'GET',
+							headers: {},
+							postData: {},
+							resourceType: 'document',
+							// redirects: req.redirectChain().map(v=>v.url())
+						}
+						// const reqUrl = req.url()
+						// if(reqUrl != url) request.url = reqUrl
+						const data = {
+							url,
+							file: '',  // optimize v8 hidden class
+							status: 200,
+							ok: true,
+							headers: {},
+							request
+						}
+						await writeData({
+							page,
+							data,
+							url,
+							getBuffer: ()=>{
+								return page.content()
+							}
+						})
+					}
+					if(isLoaded){
+						run()
+					} else {
+						page.on('domcontentloaded', run)
+					}
+        } catch (e) {
+          console.log(e.message)
+          if (/Target closed/i.test(e.message)) {
+            return
+          }
+          if (/No target with given id found/i.test(e.message)) {
+            return
+          }
+        }
+			}
+		}
+	})
 
   // goto url
   if(userAgent) page.setUserAgent(userAgent)
@@ -159,38 +242,46 @@ async function main({
   const pending = []
   onAfterOpen && pending.push(onAfterOpen(page))
   if(waitFor){
-    pending.push(waitFor===true ? closed : page.waitFor(waitFor))
-  }
+    pending.push(waitFor===true ? whenClose(page) : page.waitFor(waitFor))
+	}
+
+	const whenEnd = async ()=>{
+		await writeFile(joinPath(dir,'response.json'), JSON.stringify(responseData), 'utf8')
+		console.log('wrote response.json')
+		// screen shot
+		if(shot){
+			if(shot===true) shot = 'screenshot.png'
+			const opt = typeof shot==='object'
+			? shot
+			: {
+				path: joinPath(dir, shot),
+				fullPage: true
+			}
+			try{
+				// ensure page not closed
+				await page.screenshot(opt)
+			}catch(e){}
+		}
+
+		// finish work
+		try {
+			await browser.close()
+		} catch(e){}
+		onFinish && await onFinish(page)
+
+		return {
+			dir,
+			url,
+			data: responseData
+		}
+	}
+
   await Promise.race([
     Promise.all(pending),
-    closed
+    whenClose(page)
   ])
 
-  // screen shot
-  if(shot){
-    if(shot===true) shot = 'screenshot.png'
-    const opt = typeof shot==='object'
-    ? shot
-    : {
-      path: joinPath(dir, shot),
-      fullPage: true
-    }
-    try{
-      // ensure page not closed
-      await page.screenshot(opt)
-    }catch(e){}
-  }
-
-  // finish work
-  await browser.close()
-  await writeFile(joinPath(dir,'response.json'), JSON.stringify(responseData), 'utf8')
-  onFinish && await onFinish(page)
-
-  return {
-    dir,
-    url,
-    data: responseData
-  }
+	return whenEnd()
 }
 
 process.on('unhandledRejection', console.log)
