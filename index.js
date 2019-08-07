@@ -20,7 +20,8 @@ async function main({
   viewport,
   timeout,
   cookies,
-  launchOption,
+	launchOption,
+	extensionDir,
   waitFor,
   onResponse,
   indexFile = 'index.html',
@@ -41,9 +42,25 @@ async function main({
     dir = hostDir(new URL(url).host)
   }
 
+	extensionDir = extensionDir || joinPath(__dirname, 'extensions')
+	let extensionName
+	try{
+		extensionName = fs.readdirSync(extensionDir)
+		.filter(v=>fs.lstatSync(joinPath(extensionDir, v)).isDirectory())[0]
+	}catch(e){}
+	const CRX_PATH = extensionName && joinPath(extensionDir, extensionName)
 	// launch puppeteer
 	launchOption = assign({
-		handleSIGINT: false
+		handleSIGINT: false,
+		args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      // '--disable-web-security',
+      '--enable-devtools-experiments',
+      // '--auto-open-devtools-for-tabs',
+      extensionName && `--disable-extensions-except=${CRX_PATH}`,
+      extensionName && `--load-extension=${CRX_PATH}`
+    ].filter(Boolean)
 	}, launchOption)
   const browser = await puppeteer.launch(launchOption)
   await makeDir(dir)

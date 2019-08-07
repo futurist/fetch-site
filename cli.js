@@ -22,6 +22,7 @@ Options
 --cookies, -c       Set cookies
 --wait-for, -w      Wait for milliseconds/selector/function/closed, default true
 --index-file        Default name of index file, like index.html
+--extension-dir     Extension dir
 --on-response       onResponse event, function(response) as string
 --launch-option, -l Launch option passed into puppeteer, object as string
 --open-option, -o   Open option to passed into page, object as string
@@ -42,6 +43,7 @@ $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
     'cookies': {alias: 'c'},
     'no-headless': {type: 'boolean', alias: 'h', default: true},
     'open-option': {alias: 'o'},
+    'extension-dir': {},
     'launch-option': {alias: 'l'},
   }
 })
