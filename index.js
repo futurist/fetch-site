@@ -73,22 +73,8 @@ async function main({
     const contentType = data.headers['content-type']
     const extension = mime.extension(contentType) // inferred from mime
 		const charset = mime.charset(contentType)
-		let urlObj = {}
-		try{
-			urlObj = new URL(url)
-		} catch(e){
-			// TypeError [ERR_INVALID_URL]: Invalid URL: ":"
-			return
-		}
-    const {pathname, protocol, host} = urlObj
-    const pathArr = [
-      hostDir(protocol, ''),
-      hostDir(host),
-    ].concat(
-      /^blob/.test(protocol)  // url as a whole
-        ? safePath(pathname)
-        : ensureIndex(pathname, indexFile).split('/').map(safePath)
-    )
+		const pathArr = urlToPath(url, indexFile)
+    if(!pathArr) return
 
     // push data
     const file = data.file = joinPath(...pathArr)
@@ -172,7 +158,21 @@ async function main({
 		page.on('response', res)
 		whenClose(page).then(()=>{
 			page.off('response', res)
-		})
+    })
+    page.exposeFunction('__pptr__fileUrlExist', async e => {
+      const {url} = e
+      const pathArray = urlToPath(url, indexFile)
+      if(!pathArray) {
+        return
+      }
+      const filePath = joinPath(dir, ...pathArray)
+      try{
+        let stat = fs.lstatSync(filePath)
+        return stat
+      }catch(e){
+        // console.log(e)
+      }
+    })
 	}
 	hookPage(page)
 	page.isRoot = true
@@ -335,6 +335,26 @@ function ensureHTTP(url){
 function ensureIndex(filePath, indexFile){
   if(filePath.endsWith('/')) filePath += indexFile
   return filePath
+}
+
+function urlToPath(url, indexFile) {
+  let urlObj = {}
+		try{
+			urlObj = new URL(url)
+		} catch(e){
+			// TypeError [ERR_INVALID_URL]: Invalid URL: ":"
+			return
+		}
+    const {pathname, protocol, host} = urlObj
+    const pathArr = [
+      hostDir(protocol, ''),
+      hostDir(host),
+    ].concat(
+      /^blob/.test(protocol)  // url as a whole
+        ? safePath(pathname)
+        : ensureIndex(pathname, indexFile).split('/').map(safePath)
+    )
+  return pathArr
 }
 
 function toNodeEncoding(enc){
