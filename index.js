@@ -175,7 +175,27 @@ async function main({
 		page.on('response', res)
 		whenClose(page).then(()=>{
 			page.off('response', res)
-    })
+		})
+		const inject = function(){
+			window.addEventListener('message', async ({data, ports, target})=>{
+				const port = ports && ports[0]
+				target = port || target
+				if (data) {
+					const {type} = data
+					if(type === 'pptrBinding') {
+						const payload = await window[data.method](data.params)
+						if(target instanceof Worker || target instanceof MessagePort) {
+							target.postMessage(payload)
+						} else if(target) {
+							target.postMessage(payload, '*')
+						}
+					}
+				}
+				port && port.close()
+			})
+		}
+		page.evaluate(inject)
+		page.evaluateOnNewDocument(inject)
     page.exposeFunction('__pptr__fileUrlExist', async e => {
       const {url} = e
       const pathArray = urlToPath(url, indexFile)
