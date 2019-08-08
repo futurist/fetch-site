@@ -42,13 +42,14 @@ async function main({
     dir = hostDir(new URL(url).host)
   }
 
-	extensionDir = extensionDir || joinPath(__dirname, 'extensions')
-	let extensionName
 	try{
-		extensionName = fs.readdirSync(extensionDir)
-		.filter(v=>fs.lstatSync(joinPath(extensionDir, v)).isDirectory())[0]
+		const baseDir = joinPath(__dirname, 'extensions')
+		const extensionName = fs.readdirSync(baseDir).filter(v=>fs.lstatSync(joinPath(baseDir, v)).isDirectory())[0]
+		if(extensionName){
+			extensionDir = joinPath(baseDir, extensionName)
+		}
 	}catch(e){}
-	const CRX_PATH = extensionName && joinPath(extensionDir, extensionName)
+	const CRX_PATH = extensionDir
 	// launch puppeteer
 	launchOption = assign({
 		handleSIGINT: false,
@@ -58,8 +59,8 @@ async function main({
       // '--disable-web-security',
       '--enable-devtools-experiments',
       // '--auto-open-devtools-for-tabs',
-      extensionName && `--disable-extensions-except=${CRX_PATH}`,
-      extensionName && `--load-extension=${CRX_PATH}`
+      extensionDir && `--disable-extensions-except=${CRX_PATH}`,
+      extensionDir && `--load-extension=${CRX_PATH}`
     ].filter(Boolean)
 	}, launchOption)
   const browser = await puppeteer.launch(launchOption)
