@@ -290,8 +290,9 @@ async function main({
 	}
 
 	const whenEnd = async ()=>{
-		await writeFile(joinPath(dir,'response.json'), JSON.stringify(responseData), 'utf8')
-		console.log('wrote response.json')
+		const filename = `response-${Date.now()}.json`
+		await writeFile(joinPath(dir, filename), JSON.stringify(responseData), 'utf8')
+		console.log(`wrote ${filename}`)
 		// screen shot
 		if(shot){
 			if(shot===true) shot = 'screenshot.png'
