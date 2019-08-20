@@ -25,7 +25,12 @@ const UAList = [
     useragent:
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
     system: 'Firefox 68.0 Win10'
-  },
+	},
+	{
+		percent: '2.7%',
+		useragent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
+		system: 'Chrome 76.0 macOS'
+	},
   {
     percent: '2.7%',
     useragent:
@@ -489,6 +494,9 @@ const UAList = [
   }
 ]
 
+const os = require('os')
+const windowsRelease = require('windows-release')
+
 function getUA (keyword = '', precise = false) {
   const re1 = new RegExp(keyword + '.*' + getOS() + '$', 'i')
   const re2 = new RegExp(keyword, 'i')
@@ -499,9 +507,7 @@ function getUA (keyword = '', precise = false) {
 	  keyword && (re2.test(x.system) || re2.test(x.system.replace(/\s+/g, '')))
     )
 }
-
-const os = require('os')
-const windowsRelease = require('windows-release')
+// console.log(getUA(undefined))
 
 function getOS(platform = os.platform(), release = os.release()) {
 	let os = 'unknown'
