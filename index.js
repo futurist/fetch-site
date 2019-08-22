@@ -52,10 +52,16 @@ async function main({
 	const CRX_PATH = extensionDir
 	// launch puppeteer
 	launchOption = assign({
+		defaultViewport: viewport,
 		handleSIGINT: false,
+		ignoreHTTPSErrors: true,
 		args: [
+			userAgent && `--user-agent="${userAgent}"`,
+			'--disable-infobars',
       '--no-sandbox',
-      '--disable-setuid-sandbox',
+			'--disable-setuid-sandbox',
+			'--ignore-certifcate-errors',
+			'--ignore-certifcate-errors-spki-list',
       // '--disable-web-security',
       '--enable-devtools-experiments',
       // '--auto-open-devtools-for-tabs',
@@ -178,6 +184,7 @@ async function main({
 			page.off('response', res)
 		})
 		const inject = function(){
+			delete navigator.__proto__.webdriver
 			window.addEventListener('message', async ({data, ports, target})=>{
 				const port = ports && ports[0]
 				target = port || target
