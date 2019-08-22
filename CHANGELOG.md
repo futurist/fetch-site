@@ -1,3 +1,15 @@
+<a name="1.7.8"></a>
+## [1.7.8](https://github.com/futurist/fetch-site/compare/1.7.7...1.7.8) (2019-8-22 10:11:42)
+
+- add ignoreHTTPSErrors  [851fbaa](https://github.com/futurist/fetch-site/commit/851fbaa)
+- update ua  [4e017c7](https://github.com/futurist/fetch-site/commit/4e017c7)
+- reponse.json add timestamp  [f6431ed](https://github.com/futurist/fetch-site/commit/f6431ed)
+- fix: extensionDir misconfig  [83a9764](https://github.com/futurist/fetch-site/commit/83a9764)
+- add inject of message response of pptrBinding  [a9f5513](https://github.com/futurist/fetch-site/commit/a9f5513)
+- add extension support and extensionDir  [cdcfc78](https://github.com/futurist/fetch-site/commit/cdcfc78)
+- add urlToPath  [cefb7c8](https://github.com/futurist/fetch-site/commit/cefb7c8)
+
+
 <a name="1.7.7"></a>
 ## [1.7.7](https://github.com/futurist/fetch-site/compare/1.7.6...1.7.7) (2019-8-6 17:35:20)
 
