@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "eval-expression": "^1.0.0",
+    "macos-release": "^2.3.0",
     "make-dir": "^3.0.0",
     "meow": "^5.0.0",
     "mime-types": "^2.1.24",

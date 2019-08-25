@@ -56,7 +56,7 @@ async function main({
 		handleSIGINT: false,
 		ignoreHTTPSErrors: true,
 		args: [
-			userAgent && `--user-agent="${userAgent}"`,
+			userAgent && `--user-agent=${userAgent}`,
 			'--disable-infobars',
       '--no-sandbox',
 			'--disable-setuid-sandbox',

@@ -495,38 +495,49 @@ const UAList = [
 ]
 
 const os = require('os')
+const {execSync} = require('child_process')
 const windowsRelease = require('windows-release')
+const macosRelease = require('macos-release');
 
 function getUA (keyword = '', precise = false) {
-  const re1 = new RegExp(keyword + '.*' + getOS() + '$', 'i')
+	const {os, ver, name} = getOS()
+  const re1 = new RegExp(keyword + '.*' + name + '$', 'i')
   const re2 = new RegExp(keyword, 'i')
-  return precise
+  let ua = precise
     ? UAList.find(x => x.system === keyword)
     : UAList.find(
 	  x => re1.test(x.system) || re1.test(x.system.replace(/\s+/g, '')) ||
 	  keyword && (re2.test(x.system) || re2.test(x.system.replace(/\s+/g, '')))
-    )
+		)
+	if(os == 'macOS') {
+		ua.useragent = ua.useragent.replace(/(Mac OS X\s+)([\d._]+)/i, (_, a)=> a + ver.version.replace(/\./g, '_'))
+	}
+	return ua
 }
-// console.log(getUA(undefined))
+// console.log(getUA())
 
 function getOS(platform = os.platform(), release = os.release()) {
 	let os = 'unknown'
-	switch(platform){
+	let ver = 'unknown'
+	let name = 'unknown'
+	switch(platform) {
 		case 'android':
 			break
 		case 'cygwin':
 		case 'win32':{
-			let ver = windowsRelease(release) || ''
-			os = 'Win' + ver
-			break
+			ver = windowsRelease(release) || ''
+			os = 'Win'
+			return {os, ver, name: os+ver}
 		}
 		case 'darwin':
 			os = 'macOS'
-			break
+			ver = macosRelease(release) || ''
+			ver.version = execSync('sw_vers -productVersion').toString().trim()
+			return {os, ver, name: os}
 		default:
 			os = 'Linux'
 	}
-	return os
+	return {os, ver, name}
 }
 
 module.exports = {
