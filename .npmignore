@@ -1,5 +1,0 @@
-/__tests__
-*.log
-node_modules/
-coverage/
-tmp/

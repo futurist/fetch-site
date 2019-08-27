@@ -1,6 +1,6 @@
 {
   "name": "fetch-site",
-  "version": "1.7.9",
+  "version": "1.8.0",
   "main": "index.js",
   "repository": "https://github.com/futurist/fetch-site",
   "license": "MIT",
@@ -10,7 +10,10 @@
   "bin": {
     "fs": "cli.js",
     "fetch-site": "cli.js"
-  },
+	},
+	"files": [
+		"*.js"
+	],
   "dependencies": {
     "eval-expression": "^1.0.0",
     "macos-release": "^2.3.0",
