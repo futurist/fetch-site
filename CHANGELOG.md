@@ -1,3 +1,9 @@
+<a name="1.7.9"></a>
+## [1.7.9](https://github.com/futurist/fetch-site/compare/1.7.8...1.7.9) (2019-8-27 20:06:50)
+
+- fix bug of getUA  [8c0c1ae](https://github.com/futurist/fetch-site/commit/8c0c1ae)
+
+
 <a name="1.7.8"></a>
 ## [1.7.8](https://github.com/futurist/fetch-site/compare/1.7.7...1.7.8) (2019-8-22 10:11:42)
 
