@@ -74,7 +74,7 @@ flags.launchOption = Object.assign({
 }, flags.launchOption)
 
 ;(async ()=>{
-  const {dir, url, data} = await main(flags)
+  const {dir, url, data} = await main(flags) || {}
   console.log(`\nSuccess: site ${url} saved into ${dir}`)
 })()
 

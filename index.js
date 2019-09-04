@@ -69,10 +69,10 @@ async function main({
       extensionDir && `--load-extension=${CRX_PATH}`
     ].filter(Boolean)
 	}, launchOption)
-  const browser = await puppeteer.launch(launchOption)
+  let browser = await puppeteer.launch(launchOption)
   await makeDir(dir)
-  const page = await browser.newPage()
-  const responseData = []
+	const page = (await browser.pages())[0] || await browser.newPage()
+	const responseData = []
 
 	const writeData = async ({page, url, data, getBuffer})=>{
     if((/^data:/i.test(url))
@@ -286,9 +286,12 @@ async function main({
   if(viewport) page.setViewport(viewport)
   if(timeout != null) page.setDefaultNavigationTimeout(timeout)
   if(cookies) page.setCookie(...cookies)
-  onBeforeOpen && await onBeforeOpen(page)
-  await page.goto(url, openOption)
-
+	onBeforeOpen && await onBeforeOpen(page)
+	try{
+		await page.goto(url, openOption)
+	}catch(e){
+		console.log(e.message)
+	}
   // wait finish
   const pending = []
   onAfterOpen && pending.push(onAfterOpen(page))
@@ -316,9 +319,12 @@ async function main({
 		}
 
 		// finish work
-		try {
-			await browser.close()
-		} catch(e){}
+		let alive = browser && !(browser).disconnected
+		if(alive){
+			try {
+				await browser.close()
+			} catch(e){}
+		}
 		onFinish && await onFinish(page)
 
 		return {
@@ -328,9 +334,32 @@ async function main({
 		}
 	}
 
+	let closePromiseRes
+	const closePromise = new Promise((res)=>closePromiseRes = res)
+	async function checkClosed () {
+		let alive = browser && !(browser).disconnected
+		if (alive) {
+			// browser.disconnect()
+			await browser.close()
+			browser = null
+			console.log('browser closed')
+		}
+		closePromiseRes()
+	}
+
+	browser.on('disconnected', e => {
+    browser.removeAllListeners()
+    browser.disconnected = true
+  })
+
+	process.on('beforeExit', () => checkClosed())
+  process.on('SIGTERM', () => checkClosed())
+  process.on('SIGINT', () => checkClosed())
+
   await Promise.race([
     Promise.all(pending),
-    whenClose(page)
+		whenClose(page),
+		closePromise
   ])
 
 	return whenEnd()
