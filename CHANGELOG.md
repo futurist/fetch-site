@@ -1,3 +1,10 @@
+<a name="1.8.1"></a>
+## [1.8.1](https://github.com/futurist/fetch-site/compare/1.7.9...1.8.1) (2019-9-4 20:18:41)
+
+- add close check  [33c57ac](https://github.com/futurist/fetch-site/commit/33c57ac)
+- 1.8.0  [cdbf672](https://github.com/futurist/fetch-site/commit/cdbf672)
+
+
 <a name="1.7.9"></a>
 ## [1.7.9](https://github.com/futurist/fetch-site/compare/1.7.8...1.7.9) (2019-8-27 20:06:50)
 
