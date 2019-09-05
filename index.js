@@ -20,8 +20,10 @@ async function main({
   viewport,
   timeout,
   cookies,
-	launchOption,
-	extensionDir,
+  launchOption,
+  extensionDir,
+  executablePath = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome',
+  userDataDir = '/Users/jamesyang/Library/Application\ Support/Google/Chrome',
   waitFor,
   onResponse,
   indexFile = 'index.html',
@@ -58,17 +60,17 @@ async function main({
 		args: [
 			userAgent && `--user-agent=${userAgent}`,
 			'--disable-infobars',
-      '--no-sandbox',
+			'--no-sandbox',
 			'--disable-setuid-sandbox',
 			'--ignore-certifcate-errors',
 			'--ignore-certifcate-errors-spki-list',
-      // '--disable-web-security',
-      '--enable-devtools-experiments',
-      // '--auto-open-devtools-for-tabs',
-      extensionDir && `--disable-extensions-except=${CRX_PATH}`,
-      extensionDir && `--load-extension=${CRX_PATH}`
-    ].filter(Boolean)
-	}, launchOption)
+			// '--disable-web-security',
+			'--enable-devtools-experiments',
+			// '--auto-open-devtools-for-tabs',
+			extensionDir && `--disable-extensions-except=${CRX_PATH}`,
+			extensionDir && `--load-extension=${CRX_PATH}`
+		].filter(Boolean)
+	}, launchOption, executablePath && {executablePath}, userDataDir && {userDataDir})
   let browser = await puppeteer.launch(launchOption)
   await makeDir(dir)
 	const page = (await browser.pages())[0] || await browser.newPage()

@@ -11,24 +11,26 @@ Usage
 $ ${pkg.name} url [options]
 
 Options
---version           Show version info
---help              Show help info
---no-headless, -h   Set {headless: false} for 'launch-option', default true
---dir, -d           Dir to save result to
---shot, -s          Filename to save a screenshot after page open
---user-agent, -u    Set userAgent, string
---viewport, -v      Set viewport, , e.g. '{width:1024, height: 768}'
---timeout, -t       Set maximum navigation time in milliseconds
---cookies, -c       Set cookies
---wait-for, -w      Wait for milliseconds/selector/function/closed, default true
---index-file        Default name of index file, like index.html
---extension-dir     Extension dir
---on-response       onResponse event, function(response) as string
---launch-option, -l Launch option passed into puppeteer, object as string
---open-option, -o   Open option to passed into page, object as string
---on-before-open    Before open page event, function(page) as string
---on-after-open     After open page event, function(page) as string
---on-finish         Finish fetch event, function(page) as string
+--version            Show version info
+--help               Show help info
+--no-headless, -h    Set {headless: false} for 'launch-option', default true
+--dir, -d            Dir to save result to
+--shot, -s           Filename to save a screenshot after page open
+--user-agent, -u     Set userAgent, string
+--executable-path    Set executablePath for browser
+--user-data-dir      Set userDataDir for browser
+--viewport, -v       Set viewport, , e.g. '{width:1024, height: 768}'
+--timeout, -t        Set maximum navigation time in milliseconds
+--cookies, -c        Set cookies
+--wait-for, -w       Wait for milliseconds/selector/function/closed, default true
+--index-file         Default name of index file, like index.html
+--extension-dir      Extension dir
+--on-response        onResponse event, function(response) as string
+--launch-option, -l  Launch option passed into puppeteer, object as string
+--open-option, -o    Open option to passed into page, object as string
+--on-before-open     Before open page event, function(page) as string
+--on-after-open      After open page event, function(page) as string
+--on-finish          Finish fetch event, function(page) as string
 
 Examples
 $ ${pkg.name} http://baidu.com -o '{waitUntil:"networkidle0"}'
