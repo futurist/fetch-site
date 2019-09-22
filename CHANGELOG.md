@@ -1,3 +1,11 @@
+<a name="1.8.2"></a>
+## [1.8.2](https://github.com/futurist/fetch-site/compare/1.8.1...1.8.2) (9/23/2019, 4:21:06 AM)
+
+- cleanup options  [ac95d26](https://github.com/futurist/fetch-site/commit/ac95d26)
+- add isMain and isNavigation  [d258c38](https://github.com/futurist/fetch-site/commit/d258c38)
+- add executablePath  [9570db1](https://github.com/futurist/fetch-site/commit/9570db1)
+
+
 <a name="1.8.1"></a>
 ## [1.8.1](https://github.com/futurist/fetch-site/compare/1.7.9...1.8.1) (2019-9-4 20:18:41)
 
