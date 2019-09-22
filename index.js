@@ -151,7 +151,9 @@ async function main({
     const request = {
       method: req.method(),
       headers: req.headers(),
-      postData: req.postData(),
+			postData: req.postData(),
+			isMain: req.frame() && !req.frame().parentFrame(),
+      isNavigation: req.isNavigationRequest(),
       resourceType: req.resourceType(),
       // redirects: req.redirectChain().map(v=>v.url())
     }
