@@ -185,7 +185,7 @@ async function main({
 		const res = responseHook(page)
 		page.on('response', res)
 		whenClose(page).then(()=>{
-			page.off('response', res)
+			page && page.off && page.off('response', res)
 		})
 		const inject = function(){
 			delete navigator.__proto__.webdriver
